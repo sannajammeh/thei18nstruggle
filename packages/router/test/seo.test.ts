@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { isCommercialOnly } from "../src/groups.ts";
 import { localePath } from "../src/path.ts";
 import {
+  getHtmlLang,
   hreflangAlternates,
   indexableLocales,
   isIndexable,
@@ -58,6 +59,14 @@ describe("seo utilities", () => {
     expect(hreflangs).not.toContain("sv-NO");
     // Unique markets keep their full locale tag.
     expect(hreflangs).toContain("en-FR");
+  });
+
+  test("html lang carries the full tag for indexable markets, bare language for grouped", () => {
+    expect(getHtmlLang("en-US", blueprintConfig)).toBe("en-US");
+    expect(getHtmlLang("sv-SE", blueprintConfig)).toBe("sv-SE");
+    expect(getHtmlLang("en-FR", blueprintConfig)).toBe("en-FR");
+    expect(getHtmlLang("en-SE", blueprintConfig)).toBe("en");
+    expect(getHtmlLang("sv-NO", blueprintConfig)).toBe("sv");
   });
 
   test("alternates and localized paths honor localePrefix", () => {

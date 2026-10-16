@@ -1,5 +1,5 @@
-import { resolveGroups, resolveLocales } from "./groups.ts";
-import { normalizeLocale } from "./locale.ts";
+import { isCommercialOnly, resolveGroups, resolveLocales } from "./groups.ts";
+import { localeLanguage, normalizeLocale } from "./locale.ts";
 import { localePath } from "./path.ts";
 import type { Locale, Routing } from "./types.ts";
 
@@ -53,4 +53,17 @@ export function localeUrl(
   origin: string,
 ): string {
   return new URL(localePath(config, locale), origin).toString();
+}
+
+/**
+ * The HTML lang attribute for a locale: unique markets and canonicals carry
+ * the full BCP 47 tag ("en-FR", "en-US"), grouped commercial-only members the
+ * bare language ("en").
+ */
+export function getHtmlLang(locale: string, config: Routing): string {
+  const normalized = normalizeLocale(locale);
+  if (!normalized) return locale;
+  return isCommercialOnly(config, normalized)
+    ? (localeLanguage(normalized) ?? normalized)
+    : normalized;
 }

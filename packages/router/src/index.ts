@@ -6,7 +6,10 @@ export {
   REDIRECT_STATUS,
 } from "./cookies.ts";
 export { isCrawler } from "./crawler.ts";
-export { type Geolocate, geolocate } from "./geolocate.ts";
+export {
+  type Geolocate,
+  geolocate,
+} from "./geolocate.ts";
 export {
   canonicalLocale,
   isCommercialOnly,
@@ -36,6 +39,7 @@ export {
   withLocalePrefix,
 } from "./path.ts";
 export {
+  getHtmlLang,
   type HreflangAlternate,
   hreflangAlternates,
   indexableLocales,

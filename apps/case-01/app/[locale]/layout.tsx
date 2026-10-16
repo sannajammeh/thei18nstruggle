@@ -1,4 +1,4 @@
-import type { Locale } from "@concept/router";
+import { getHtmlLang, type Locale } from "@concept/router";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
@@ -39,7 +39,7 @@ export default async function RootLayout({
 
   return (
     <html
-      lang={locale}
+      lang={getHtmlLang(locale, routing)}
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
