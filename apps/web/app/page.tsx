@@ -194,8 +194,7 @@ export default function Home() {
             Give every market its own indexed locale and identical content
             multiplies into separate pages. <code>en-SE</code>, <code>en-NO</code> and{" "}
             <code>en-GB</code> carry the same products and the same words as{" "}
-            <code>en-US</code>. Those pages don&rsquo;t add coverage — they
-            compete with each other. Identical content competes on Page
+            <code>en-US</code>. Identical content competes on Page
             Authority: Google picks one winner, and yours splits across every
             market you launch.
           </Dek>
