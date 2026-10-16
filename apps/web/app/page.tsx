@@ -29,7 +29,11 @@ function Figure({
         <span>{caption}</span>
         <span
           className={
-            tone === "bad" ? "text-accent" : tone === "ok" ? "text-ok" : undefined
+            tone === "bad"
+              ? "text-accent"
+              : tone === "ok"
+                ? "text-ok"
+                : undefined
           }
         >
           {status}
@@ -38,11 +42,9 @@ function Figure({
       {code !== undefined ? (
         <pre
           className="overflow-x-auto p-4 font-mono text-sm leading-[2]"
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: self-authored, syntax-highlighted code samples
           dangerouslySetInnerHTML={{
-            __html: highlight(code, { lang: "typescript" }).replace(
-              /\n/g,
-              "",
-            ),
+            __html: highlight(code, { lang: "typescript" }).replace(/\n/g, ""),
           }}
         />
       ) : (
@@ -131,7 +133,10 @@ export default function Home() {
 
       <header className="sticky top-0 z-50">
         <div className="mx-auto flex h-[60px] max-w-[720px] items-center justify-between px-6">
-          <a href={`#${topId}`} className="text-[15px] font-bold tracking-tight">
+          <a
+            href={`#${topId}`}
+            className="text-[15px] font-bold tracking-tight"
+          >
             i18n<span className="text-dim">sucks</span>
           </a>
           <nav className="hidden gap-6 text-[13px] text-dim sm:flex">
@@ -175,7 +180,11 @@ export default function Home() {
           </div>
         </section>
 
-        <Section id={hardId} num="01 — i18n is hard" title="Everyone underestimates it.">
+        <Section
+          id={hardId}
+          num="01 — i18n is hard"
+          title="Everyone underestimates it."
+        >
           <Dek>
             International e-commerce has real, non-negotiable requirements:
             every country gets its own prices, currency, shipping rules, and
@@ -192,13 +201,17 @@ export default function Home() {
         >
           <Dek>
             Give every market its own indexed locale and identical content
-            multiplies into separate pages. <code>en-SE</code>, <code>en-NO</code> and{" "}
-            <code>en-GB</code> carry the same products and the same words as{" "}
-            <code>en-US</code>. Identical content competes on Page
-            Authority: Google picks one winner, and yours splits across every
-            market you launch.
+            multiplies into separate pages. <code>en-SE</code>,{" "}
+            <code>en-NO</code> and <code>en-GB</code> carry the same products
+            and the same words as <code>en-US</code>. Identical content competes
+            on Page Authority: Google picks one winner, and yours splits across
+            every market you launch.
           </Dek>
-          <Figure caption="Exhibit A — the uncollapsed market" status="broken" tone="bad">
+          <Figure
+            caption="Exhibit A — the uncollapsed market"
+            status="broken"
+            tone="bad"
+          >
             <Line url="/en-US" note="← indexed" />
             <Line url="/en-SE" note="← indexed, same products, same words" />
             <Line url="/en-NO" note="← indexed, same products, same words" />
@@ -207,7 +220,11 @@ export default function Home() {
           </Figure>
         </Section>
 
-        <Section id={seoId} num="03 — google seo" title="Google reads the mess literally.">
+        <Section
+          id={seoId}
+          num="03 — google seo"
+          title="Google reads the mess literally."
+        >
           <Dek>
             The crawler doesn&rsquo;t know <code>en-SE</code> is{" "}
             <code>en-US</code> with Swedish prices. Nothing structural says so —
@@ -221,7 +238,10 @@ export default function Home() {
             <Line url="/en-US" note="indexed" />
             <Line kind="no" url="/en-SE" note="duplicate of /en-US" />
             <Line kind="no" url="/en-GB" note="duplicate of /en-US" />
-            <Line kind="no" url="✗ hreflang: every URL points at every other URL" />
+            <Line
+              kind="no"
+              url="✗ hreflang: every URL points at every other URL"
+            />
           </Figure>
         </Section>
 
@@ -243,11 +263,23 @@ export default function Home() {
             keeps them there.
           </Dek>
           <Figure caption="What search engines see" status="indexed" tone="ok">
-            <Line kind="good" url="example.com" note="← en-US · canonical for the English group" />
+            <Line
+              kind="good"
+              url="example.com"
+              note="← en-US · canonical for the English group"
+            />
             <Line kind="good" url="/sv-SE" note="← the Swedish canonical" />
             <Line kind="good" url="/fr-FR" note="← the French canonical" />
-            <Line kind="good" url="/en-FR" note="← excluded from the group · unique, fully indexed" />
-            <Line kind="muted" url="/en-SE /en-NO …" note="commercial-only → noindex, canonical to root" />
+            <Line
+              kind="good"
+              url="/en-FR"
+              note="← excluded from the group · unique, fully indexed"
+            />
+            <Line
+              kind="muted"
+              url="/en-SE …"
+              note="commercial-only → noindex, canonical to root"
+            />
           </Figure>
           <Figure caption="The canonical policy" status="policy">
             <Line kind="muted" url="URL              indexed   canonical to" />
@@ -255,7 +287,7 @@ export default function Home() {
             <Line url="/sv-SE            yes       itself" />
             <Line url="/fr-FR            yes       itself" />
             <Line url="/en-FR            yes       itself" />
-            <Line url="/en-SE /en-NO     no        example.com" />
+            <Line url="/en-SE            no        example.com" />
           </Figure>
         </Section>
 
@@ -280,42 +312,34 @@ export default function Home() {
             <Figure
               caption="The whole system"
               status="typescript"
-              code={`const i18nConfig: I18nConfig = {
+              code={`import { createRouter, type Routing } from "@concept/router";
+
+const routing: Routing = {
   defaultLocale: "en-US",
 
-  languages: ["en", "sv", "fr"],
+  locales: ["en-US", "en-SE", "en-FR", "sv-SE", "fr-FR"],
 
-  locales: [
-    "en-US",
-    "en-SE",
-    "en-NO",
-    "en-GB",
-    "en-FR",
-    "sv-SE",
-    "sv-NO",
-    "fr-FR",
-    "fr-BE",
-    "fr-CA",
-  ],
-
-  groups: {
-    en: {
+  groups: [
+    {
+      language: "en",
       canonicalLocale: "en-US",
-      members: ["en-US", "en-SE", "en-NO", "en-GB", "en-DE", "en-NL"],
+      members: ["en-*"],
       exclude: ["en-FR"], // France stays unique
     },
-    sv: {
+    {
+      language: "sv",
       canonicalLocale: "sv-SE",
-      members: ["sv-SE", "sv-NO"],
+      members: ["sv-*"],
     },
-    fr: {
+    {
+      language: "fr",
       canonicalLocale: "fr-FR",
-      members: ["fr-FR"],
+      members: ["fr-*"],
     },
-  },
+  ],
 };
 
-export const proxy = createi18nProxy(i18nConfig);`}
+export const proxy = await createRouter(routing);`}
             />
 
             <span className="mt-9 inline-flex items-center gap-2.5 font-mono text-sm text-foreground">
