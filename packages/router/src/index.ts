@@ -45,7 +45,6 @@ export {
 export type {
   GeoHint,
   GeolocationMode,
-  Routing,
   Language,
   Locale,
   LocaleGroup,
@@ -53,5 +52,6 @@ export type {
   Outcome,
   Region,
   RouterRequest,
+  Routing,
   WildcardLocale,
 } from "./types.ts";

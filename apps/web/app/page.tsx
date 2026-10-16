@@ -127,7 +127,6 @@ export default function Home() {
 
   return (
     <>
-      {/* immersive vignette */}
       <div aria-hidden className="vig vig-top" />
       <div aria-hidden className="vig vig-bottom" />
 

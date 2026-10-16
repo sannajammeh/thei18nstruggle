@@ -1,16 +1,11 @@
 import { normalizeLocale } from "./locale.ts";
-import type { Routing, Locale, LocalePrefix } from "./types.ts";
+import type { Locale, LocalePrefix, Routing } from "./types.ts";
 
 export interface LocalePath {
   locale: Locale;
-  /** The remainder of the pathname after the locale prefix, starting with "/" (or empty). */
   rest: string;
 }
 
-/**
- * Detect a configured locale as the first path segment.
- * "/sv-SE/products" → { locale: "sv-SE", rest: "/products" }, "/" → null.
- */
 export function matchLocalePath(
   pathname: string,
   locales: readonly Locale[],
@@ -22,7 +17,6 @@ export function matchLocalePath(
   return { locale, rest: match[2] || "" };
 }
 
-/** Prefix a pathname with a locale, honoring the `localePrefix` strategy. */
 export function withLocalePrefix(
   pathname: string,
   locale: Locale,
@@ -34,7 +28,6 @@ export function withLocalePrefix(
   return `/${locale}${base === "/" ? "" : base}`;
 }
 
-/** Inverse of {@link matchLocalePath}: remove a locale prefix from a pathname. */
 export function stripLocalePrefix(
   pathname: string,
   locales: readonly Locale[],
@@ -44,7 +37,6 @@ export function stripLocalePrefix(
   return { pathname: match.rest || "/", locale: match.locale };
 }
 
-/** The URL path for a locale, honoring the config's `localePrefix` strategy. */
 export function localePath(
   config: Routing,
   locale: string,

@@ -1,9 +1,6 @@
-import type { Routing, RouterRequest } from "../src/types.ts";
+import type { RouterRequest, Routing } from "../src/types.ts";
 
-/**
- * The blueprint's example configuration. Note en-DE/en-NL appear as members
- * but are not in `locales` — they must be ignored, not fatal.
- */
+/** en-DE/en-NL are members but not in `locales` — they must be ignored, not fatal. */
 export const blueprintConfig: Routing = {
   defaultLocale: "en-US",
   locales: [
@@ -38,7 +35,6 @@ export const blueprintConfig: Routing = {
   ],
 };
 
-/** The blueprint's optional "flexible wildcard model". */
 export function flexibleConfig(
   localePrefix: Routing["localePrefix"] = "as-needed",
 ): Routing {

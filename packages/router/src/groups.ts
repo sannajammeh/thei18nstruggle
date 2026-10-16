@@ -1,5 +1,5 @@
 import { localeLanguage, normalizeLocale } from "./locale.ts";
-import type { Routing, Language, Locale, WildcardLocale } from "./types.ts";
+import type { Language, Locale, Routing, WildcardLocale } from "./types.ts";
 
 /** A group with wildcards expanded, unknown locales dropped, and excludes applied. */
 export interface ResolvedGroup {
@@ -8,11 +8,6 @@ export interface ResolvedGroup {
   members: Locale[];
 }
 
-/**
- * Normalize and validate the config's locale list. Locales must be
- * language-country BCP 47 tags ("en-US"), never bare languages, and the
- * default locale must be one of them.
- */
 export function resolveLocales(config: Routing): Locale[] {
   const locales: Locale[] = [];
   for (const raw of config.locales) {
@@ -36,12 +31,6 @@ export function resolveLocales(config: Routing): Locale[] {
   return locales;
 }
 
-/**
- * Resolve the config's groups: `lang-*` wildcards are expanded against the
- * known locales, members referencing locales the platform does not operate in
- * are dropped (not fatal), and excluded locales are removed from membership —
- * exclusion is what makes a locale unique (fully indexed) rather than grouped.
- */
 export function resolveGroups(config: Routing): ResolvedGroup[] {
   const localeSet = new Set(resolveLocales(config));
   const groups: ResolvedGroup[] = [];
@@ -65,7 +54,6 @@ export function resolveGroups(config: Routing): ResolvedGroup[] {
   return groups;
 }
 
-/** The group a locale belongs to as a member; locales outside every group are unique markets. */
 export function localeGroup(
   config: Routing,
   locale: string,
@@ -77,7 +65,6 @@ export function localeGroup(
   );
 }
 
-/** The group defined for a language, regardless of membership. */
 export function languageGroup(
   config: Routing,
   language: string,
@@ -87,14 +74,13 @@ export function languageGroup(
   );
 }
 
-/** The canonical locale of the locale's group, or the locale itself when unique. */
 export function canonicalLocale(config: Routing, locale: string): Locale {
   const normalized = normalizeLocale(locale);
   if (!normalized) return locale as Locale;
   return localeGroup(config, normalized)?.canonicalLocale ?? normalized;
 }
 
-/** Grouped member that is not the canonical: noindex, canonical points elsewhere. */
+/** A grouped member that is not its group's canonical: noindex, canonical points to the canonical. */
 export function isCommercialOnly(config: Routing, locale: string): boolean {
   const normalized = normalizeLocale(locale);
   if (!normalized) return false;
@@ -102,7 +88,6 @@ export function isCommercialOnly(config: Routing, locale: string): boolean {
   return group !== undefined && group.canonicalLocale !== normalized;
 }
 
-/** Expand a member list, expanding `lang-*` wildcards against the known locales. */
 function expand(
   entries: (Locale | WildcardLocale)[],
   localeSet: Set<Locale>,
@@ -116,7 +101,6 @@ function expand(
       }
       continue;
     }
-    // Unknown members (like the blueprint's en-DE/en-NL example) are ignored.
     const normalized = normalizeLocale(entry);
     if (normalized && localeSet.has(normalized)) result.push(normalized);
   }

@@ -9,10 +9,7 @@ const dictionaries = {
 
 export type Dictionary = Awaited<ReturnType<(typeof dictionaries)["en"]>>;
 
-/**
- * Loads the dictionary for a locale. Dictionaries are keyed by language so
- * every market of a group (e.g. en-US and en-SE) shares the same copy.
- */
+/** Dictionaries are keyed by language: every market in a group shares the same copy. */
 export async function getDictionary(locale: string): Promise<Dictionary> {
   const language = localeLanguage(locale);
   if (!language || !(language in dictionaries)) notFound();

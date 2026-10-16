@@ -1,21 +1,14 @@
 import { match } from "@formatjs/intl-localematcher";
 import Negotiator from "negotiator";
 import { resolveLocales } from "./groups.ts";
-import type { Routing, Locale, RouterRequest } from "./types.ts";
+import type { Locale, RouterRequest, Routing } from "./types.ts";
 
 export type Negotiate = (
   request: RouterRequest,
   config: Routing,
 ) => Promise<Locale>;
 
-/**
- * Resolve the requested locale from the Accept-Language header
- * (parsed by `negotiator`, matched with CLDR-style fallback via
- * `@formatjs/intl-localematcher`). Falls back to the default locale.
- *
- * The language is always decided by the browser; region-level corrections
- * happen later, in `getOutcome`, from geolocation.
- */
+/** The browser decides the language; region-level corrections happen in getOutcome. */
 export async function negotiate(
   request: RouterRequest,
   config: Routing,

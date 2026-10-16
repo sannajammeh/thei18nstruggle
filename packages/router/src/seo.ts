@@ -1,20 +1,11 @@
 import { resolveGroups, resolveLocales } from "./groups.ts";
 import { normalizeLocale } from "./locale.ts";
 import { localePath } from "./path.ts";
-import type { Routing, Locale } from "./types.ts";
+import type { Locale, Routing } from "./types.ts";
 
 /**
- * SEO utilities for the locale grouping model.
- *
- * The app can render every locale combination for humans (commercial-only
- * locales included), while these helpers keep what bots and metadata see
- * restricted to the indexable set: group canonicals + unique markets.
- */
-
-/**
- * Locales search engines may index: every group canonical, plus every locale
- * covered by no group (unique markets — which includes excluded locales).
- * Order: canonicals in group order first, then uniques in locale order.
+ * Locales search engines may index: group canonicals plus locales covered by
+ * no group (unique markets).
  */
 export function indexableLocales(config: Routing): Locale[] {
   const locales = resolveLocales(config);
@@ -29,7 +20,6 @@ export function indexableLocales(config: Routing): Locale[] {
   ];
 }
 
-/** Whether a locale is indexed and canonical to itself. */
 export function isIndexable(config: Routing, locale: string): boolean {
   const normalized = normalizeLocale(locale);
   return (
@@ -38,15 +28,11 @@ export function isIndexable(config: Routing, locale: string): boolean {
 }
 
 export interface HreflangAlternate {
-  /** BCP 47 tag, e.g. "en-US". Unique markets keep their full tag (e.g. "en-FR"). */
   hreflang: string;
   href: string;
 }
 
-/**
- * The hreflang cluster for an origin: every indexable locale, plus x-default
- * pointing at the root. Commercial-only locales never appear.
- */
+/** The hreflang cluster for an origin: every indexable locale plus x-default at the root. */
 export function hreflangAlternates(
   config: Routing,
   origin: string,
@@ -61,7 +47,6 @@ export function hreflangAlternates(
   ];
 }
 
-/** The absolute URL for a locale's entry point. */
 export function localeUrl(
   config: Routing,
   locale: string,

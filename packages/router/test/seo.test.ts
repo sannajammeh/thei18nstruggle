@@ -10,10 +10,8 @@ import { blueprintConfig, flexibleConfig } from "./helpers.ts";
 
 describe("indexable derivation", () => {
   test("derives indexable locales per the blueprint", () => {
-    // Group canonicals first (in group order), then uniques in locale order.
-    // fr-BE/fr-CA are in `locales` but covered by no group, so they are unique
-    // markets per the derivation rule ("every locale not covered by any
-    // group's members"), even though the blueprint's example result omits them.
+    // fr-BE/fr-CA are covered by no group → unique markets, although the
+    // blueprint's example result omits them.
     expect(indexableLocales(blueprintConfig)).toEqual([
       "en-US",
       "sv-SE",
@@ -56,7 +54,6 @@ describe("seo utilities", () => {
       .filter((a) => a.hreflang !== "x-default")
       .map((a) => a.hreflang);
     expect(hreflangs).toEqual(indexableLocales(blueprintConfig));
-    // Commercial-only locales never appear.
     expect(hreflangs).not.toContain("en-SE");
     expect(hreflangs).not.toContain("sv-NO");
     // Unique markets keep their full locale tag.

@@ -10,7 +10,7 @@ import {
 const initialConfig = { ...blueprintConfig, geolocation: "initial" as const };
 
 describe("getOutcome", () => {
-  test("never redirects crawlers, even with geo available", async () => {
+  test("crawlers are never redirected; unprefixed root rewrites to the default subtree", async () => {
     const request = makeRequest("https://example.com/", {
       headers: { "x-vercel-ip-country": "SE", "accept-language": "en" },
       userAgent: GOOGLEBOT,
@@ -20,9 +20,36 @@ describe("getOutcome", () => {
       { geo: { region: "SE" }, locale: "en-US" },
       blueprintConfig,
     );
-    expect(outcome.type).toBe("none");
+    expect(outcome.type).toBe("rewrite");
     expect(outcome.setCookie).toBe(false);
     expect(outcome.locale).toBe("en-US");
+    expect(outcome.url).toBe("https://example.com/en-US");
+  });
+
+  test("crawlers get default content on any unprefixed path", async () => {
+    const request = makeRequest("https://example.com/products", {
+      userAgent: GOOGLEBOT,
+    });
+    const outcome = await getOutcome(
+      request,
+      { geo: null, locale: "en-US" },
+      blueprintConfig,
+    );
+    expect(outcome.type).toBe("rewrite");
+    expect(outcome.url).toBe("https://example.com/en-US/products");
+  });
+
+  test("crawlers on explicit locale URLs are served as requested", async () => {
+    const request = makeRequest("https://example.com/sv-SE", {
+      userAgent: GOOGLEBOT,
+    });
+    const outcome = await getOutcome(
+      request,
+      { geo: null, locale: "en-US" },
+      blueprintConfig,
+    );
+    expect(outcome.type).toBe("none");
+    expect(outcome.locale).toBe("sv-SE");
   });
 
   test("geo is the arbiter of truth for the region: en-NO accept + SE geo → en-SE", async () => {
@@ -57,7 +84,7 @@ describe("getOutcome", () => {
     expect(outcome.url).toBe("https://example.com/sv-SE/products?sort=price");
   });
 
-  test("geo target equal to default locale serves root and remembers", async () => {
+  test("geo target equal to default locale renders the root subtree and remembers", async () => {
     const request = makeRequest("https://example.com/", {
       headers: { "accept-language": "en" },
     });
@@ -66,7 +93,8 @@ describe("getOutcome", () => {
       { geo: { region: "US" }, locale: "en-US" },
       blueprintConfig,
     );
-    expect(outcome.type).toBe("none");
+    expect(outcome.type).toBe("rewrite");
+    expect(outcome.url).toBe("https://example.com/en-US");
     expect(outcome.locale).toBe("en-US");
     expect(outcome.setCookie).toBe(true);
   });
@@ -75,13 +103,13 @@ describe("getOutcome", () => {
     const request = makeRequest("https://example.com/", {
       headers: { "accept-language": "en" },
     });
-    // en-CN is not a configured locale → stay on the negotiated en-US.
     const outcome = await getOutcome(
       request,
       { geo: { region: "CN" }, locale: "en-US" },
       blueprintConfig,
     );
-    expect(outcome.type).toBe("none");
+    expect(outcome.type).toBe("rewrite");
+    expect(outcome.url).toBe("https://example.com/en-US");
     expect(outcome.locale).toBe("en-US");
   });
 
@@ -97,14 +125,15 @@ describe("getOutcome", () => {
     expect(outcome.setCookie).toBe(false);
   });
 
-  test("non-GET requests are never redirected", async () => {
+  test("non-GET requests are never redirected; unprefixed ones rewrite", async () => {
     const request = makeRequest("https://example.com/", { method: "POST" });
     const outcome = await getOutcome(
       request,
       { geo: { region: "SE" }, locale: "en-US" },
       blueprintConfig,
     );
-    expect(outcome.type).toBe("none");
+    expect(outcome.type).toBe("rewrite");
+    expect(outcome.url).toBe("https://example.com/en-US");
   });
 
   test("invalid cookie values are ignored", async () => {
@@ -149,7 +178,8 @@ describe("geolocation: force (default)", () => {
       { geo: { region: "US" }, locale: "en-US" },
       blueprintConfig,
     );
-    expect(outcome.type).toBe("none");
+    expect(outcome.type).toBe("rewrite");
+    expect(outcome.url).toBe("https://example.com/en-US");
     expect(outcome.setCookie).toBe(false);
   });
 });
@@ -186,8 +216,7 @@ describe("geolocation: initial", () => {
 });
 
 describe("without geolocation", () => {
-  // geo null = geolocate skipped (bot, bypass cookie, or no geo headers):
-  // routing falls back to the locale cookie, then negotiation.
+  // geo null = geolocate skipped: routing falls back to the cookie, then negotiation.
   test("a stored preference is respected", async () => {
     const request = makeRequest("https://example.com/products", {
       cookies: { NEXT_LOCALE: "sv-SE" },
@@ -202,7 +231,7 @@ describe("without geolocation", () => {
     expect(outcome.setCookie).toBe(false); // already stored
   });
 
-  test("preference for the default locale stays at the root", async () => {
+  test("preference for the default locale rewrites the root subtree", async () => {
     const request = makeRequest("https://example.com/", {
       cookies: { NEXT_LOCALE: "en-US" },
     });
@@ -211,7 +240,8 @@ describe("without geolocation", () => {
       { geo: null, locale: "en-US" },
       blueprintConfig,
     );
-    expect(outcome.type).toBe("none");
+    expect(outcome.type).toBe("rewrite");
+    expect(outcome.url).toBe("https://example.com/en-US");
   });
 
   test("negotiation alone decides the target, without pinning a cookie", async () => {
@@ -228,7 +258,7 @@ describe("without geolocation", () => {
     expect(outcome.setCookie).toBe(false);
   });
 
-  test("negotiated default locale stays at the root", async () => {
+  test("negotiated default locale rewrites the root subtree", async () => {
     const request = makeRequest("https://example.com/", {
       headers: { "accept-language": "en" },
     });
@@ -237,7 +267,8 @@ describe("without geolocation", () => {
       { geo: null, locale: "en-US" },
       blueprintConfig,
     );
-    expect(outcome.type).toBe("none");
+    expect(outcome.type).toBe("rewrite");
+    expect(outcome.url).toBe("https://example.com/en-US");
     expect(outcome.setCookie).toBe(false);
   });
 });

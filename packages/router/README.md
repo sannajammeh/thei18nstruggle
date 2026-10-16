@@ -97,6 +97,11 @@ In order (blueprint §7):
 6. **First visit, unprefixed:** accept `en-NO` + geo region `SE` → `en-SE`
    (not `en-NO`). The target is a 307 redirect and the choice is remembered
    in the cookie.
+7. **Unprefixed URLs never 404 and never redirect to a prefixed default:**
+   requests without a locale prefix are internally rewritten to
+   `/{defaultLocale}/...`, so a `[locale]`-only app tree renders them and the
+   root URL stays canonical — this includes crawlers, who get the default
+   content. `none` ("serve as-is") is reserved for explicit locale URLs.
 
 Redirects carry the original path and query string.
 

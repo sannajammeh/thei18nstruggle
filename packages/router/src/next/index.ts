@@ -7,32 +7,16 @@ import {
 import { type Geolocate, geolocate } from "../geolocate.ts";
 import { type Negotiate, negotiate } from "../negotiate.ts";
 import { getOutcome, type ResolveOutcome } from "../outcome.ts";
-import type { Routing, Outcome } from "../types.ts";
+import type { Outcome, Routing } from "../types.ts";
 
 export type ProxyFunction = (request: NextRequest) => Promise<NextResponse>;
 
-/** Swap individual stages without rewriting the wiring. */
 export interface RouterStages {
   geolocate?: Geolocate;
   negotiate?: Negotiate;
   getOutcome?: ResolveOutcome;
 }
 
-/**
- * Build the proxy function for a `proxy.ts` file:
- *
- * ```ts
- * // proxy.ts
- * import { createRouter } from "@concept/router/next";
- * import { routing } from "./i18n";
- *
- * export const proxy = await createRouter(routing);
- *
- * export const config = {
- *   matcher: "/((?!api|_next/static|_next/image|_next/data|favicon.ico|robots.txt|sitemap.xml).*)",
- * };
- * ```
- */
 export async function createRouter(
   config: Routing,
   stages: RouterStages = {},
@@ -49,11 +33,6 @@ export async function createRouter(
   };
 }
 
-/**
- * Turn an outcome into a NextResponse. 307 redirect / rewrite / pass-through,
- * persisting the locale cookie when the outcome says so. The locale cookie is
- * deliberately not httpOnly so client-side market switchers can read and write it.
- */
 export async function getResponse(
   outcome: Outcome,
   _config?: Routing,

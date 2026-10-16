@@ -1,14 +1,13 @@
 import { RequestCookies } from "@edge-runtime/cookies";
 import { BYPASS_COOKIE } from "./cookies.ts";
 import { isCrawler } from "./crawler.ts";
-import type { GeoHint, Routing, RouterRequest } from "./types.ts";
+import type { GeoHint, RouterRequest, Routing } from "./types.ts";
 
 export type Geolocate = (
   request: RouterRequest,
   config: Routing,
 ) => Promise<GeoHint | null>;
 
-/** Edge/host geo headers, in priority order. */
 const REGION_HEADERS = [
   "x-vercel-ip-country",
   "cf-ipcountry",
@@ -17,13 +16,8 @@ const REGION_HEADERS = [
 ];
 
 /**
- * Resolve the geolocation hint for a request, or null when geolocation is
- * skipped — in which case routing falls back to the locale cookie and
- * negotiation. Geolocation is skipped for:
- *
- * - crawler user agents (crawlers are never geo-routed),
- * - visitors carrying the bypass cookie (`X-BYPASS-GEOLOCATION`),
- * - requests with no geo headers at all.
+ * Returns null when geolocation is skipped — routing then falls back to the
+ * locale cookie and negotiation.
  */
 export async function geolocate(
   request: RouterRequest,

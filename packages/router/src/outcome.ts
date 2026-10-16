@@ -6,10 +6,10 @@ import { joinLocale, localeLanguage, normalizeLocale } from "./locale.ts";
 import { localePath, matchLocalePath } from "./path.ts";
 import type {
   GeoHint,
-  Routing,
   Locale,
   Outcome,
   RouterRequest,
+  Routing,
 } from "./types.ts";
 
 export interface OutcomeInput {
@@ -25,20 +25,6 @@ export type ResolveOutcome = (
   config: Routing,
 ) => Promise<Outcome>;
 
-/**
- * Decide what to do with a request, per the blueprint's request handling rules:
- *
- * 1. Crawlers are never redirected.
- * 2. Non-navigation requests are never redirected.
- * 3. Explicit locale URLs (/en-SE/...) are served as requested.
- * 4. Geolocation is the arbiter of truth for the region — with
- *    `geolocation: "force"` the final locale is always `<lang>-<geoRegion>`,
- *    cookie or not; with `"initial"` an existing locale cookie wins instead.
- * 5. Without geolocation, a stored locale cookie wins, then negotiation.
- *
- * Redirects use 307 and carry the original path and query. Commercial-only
- * and canonical handling afterwards is a rendering concern (SEO utilities).
- */
 export async function getOutcome(
   request: RouterRequest,
   input: OutcomeInput,
@@ -57,13 +43,14 @@ export async function getOutcome(
     url: url.toString(),
   });
 
-  // 1. Never redirect search engine crawlers.
-  if (isCrawler(request.headers.get("user-agent"))) return serve();
+  if (isCrawler(request.headers.get("user-agent"))) {
+    return current ? serve() : rewriteToDefault(url, config);
+  }
 
-  // 2. Never redirect non-navigation requests.
-  if (!/^(?:GET|HEAD)$/i.test(request.method ?? "GET")) return serve();
+  if (!/^(?:GET|HEAD)$/i.test(request.method ?? "GET")) {
+    return current ? serve() : rewriteToDefault(url, config);
+  }
 
-  // 3. Explicit locale URLs are served as requested, cookie or not.
   if (current) return serve();
 
   const value = cookies.get(LOCALE_COOKIE)?.value;
@@ -71,8 +58,7 @@ export async function getOutcome(
   const preferred =
     normalized && locales.includes(normalized) ? normalized : undefined;
 
-  // 4. Geolocation decides the region — "force" overrides everything,
-  //    "initial" defers to an existing preference.
+  // "force" overrides any preference; "initial" defers to an existing one.
   if (
     input.geo &&
     ((config.geolocation ?? "force") === "force" || !preferred)
@@ -81,13 +67,10 @@ export async function getOutcome(
     return routeTo(url, target, config, preferred !== target);
   }
 
-  // 5. No geolocation: a stored preference wins over negotiation.
   if (preferred) {
-    if (
-      preferred === config.defaultLocale &&
-      (config.localePrefix ?? "as-needed") === "as-needed"
-    )
-      return serve();
+    if (preferred === config.defaultLocale) {
+      return rewriteToDefault(url, config);
+    }
     return redirectTo(
       url,
       localePath(config, preferred, url.pathname),
@@ -96,7 +79,6 @@ export async function getOutcome(
     );
   }
 
-  // 6. Negotiation alone decides; nothing is pinned to a cookie.
   return routeTo(url, input.locale, config, false);
 }
 
@@ -116,30 +98,32 @@ export function resolveTarget(
   return candidate && locales.includes(candidate) ? candidate : locale;
 }
 
-/** Route to a target locale: 307 redirect, internal rewrite, or stay put. */
+/**
+ * Unprefixed requests are rewritten into the default locale's prefixed
+ * subtree — force-prefixed regardless of `localePrefix`, since the request
+ * URL carries no prefix.
+ */
+function rewriteToDefault(url: URL, config: Routing): Outcome {
+  const rest = url.pathname === "/" ? "" : url.pathname;
+  return {
+    type: "rewrite",
+    setCookie: false,
+    locale: config.defaultLocale,
+    url: new URL(
+      `/${config.defaultLocale}${rest}${url.search}`,
+      url,
+    ).toString(),
+  };
+}
+
 function routeTo(
   url: URL,
   target: Locale,
   config: Routing,
   setCookie: boolean,
 ): Outcome {
-  const atDefault = target === config.defaultLocale;
-
-  if (atDefault && (config.localePrefix ?? "as-needed") === "as-needed") {
-    // Already on the right experience at the root.
-    return { type: "none", setCookie, locale: target, url: url.toString() };
-  }
-
-  if (atDefault) {
-    return {
-      type: "rewrite",
-      setCookie,
-      locale: target,
-      url: new URL(
-        localePath(config, target, url.pathname) + url.search,
-        url,
-      ).toString(),
-    };
+  if (target === config.defaultLocale) {
+    return { ...rewriteToDefault(url, config), setCookie };
   }
 
   return redirectTo(
