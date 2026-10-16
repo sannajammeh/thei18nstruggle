@@ -1,26 +1,178 @@
 @import "tailwindcss";
 
+html {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0a0a0a;
+  --panel: #111111;
+  --line: #232323;
+  --foreground: #e8e8e6;
+  --dim: #8a8a86;
+  --faint: #55554f;
+  --accent: #ff4a3a;
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-panel: var(--panel);
+  --color-line: var(--line);
   --color-foreground: var(--foreground);
+  --color-dim: var(--dim);
+  --color-faint: var(--faint);
+  --color-accent: var(--accent);
+  --color-ok: #3fbf6f;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* browser surfaces, themed */
+::selection {
+  background: #e8e8e6;
+  color: #0a0a0a;
+}
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3a3a3a;
+}
+
+/* immersive vignette — fixed, non-interactive */
+.vig {
+  position: fixed;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  z-index: 40;
+}
+.vig-top {
+  top: 0;
+  height: 220px;
+  background: linear-gradient(
+    180deg,
+    rgba(5, 5, 5, 0.9) 60px,
+    rgba(5, 5, 5, 0)
+  );
+}
+.vig-bottom {
+  bottom: 0;
+  height: 170px;
+  background: linear-gradient(0deg, rgba(5, 5, 5, 0.88), rgba(5, 5, 5, 0));
+}
+@media (max-width: 640px) {
+  .vig-top {
+    height: 160px;
+  }
+  .vig-bottom {
+    height: 120px;
+  }
+}
+
+/* inline code in prose */
+.dek code {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.85em;
+  color: var(--foreground);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+
+/* code-exhibit line vocabulary */
+.ex {
+  display: block;
+  white-space: nowrap;
+  color: var(--foreground);
+}
+.ex-bad {
+  color: var(--dim);
+  text-decoration: line-through;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 1.5px;
+}
+.ex .cm {
+  color: var(--faint);
+}
+.ex.muted {
+  color: var(--dim);
+}
+.ex.no {
+  color: var(--accent);
+}
+.ex.ok {
+  color: #3fbf6f;
+}
+
+/* sugar-high theme — tuned for the black ground */
+figure {
+  --sh-keyword: #f47067;
+  --sh-string: #00a99a;
+  --sh-comment: #6a6a66;
+  --sh-identifier: #e8e8e6;
+  --sh-sign: #8a8a86;
+  --sh-class: #7fd1ff;
+  --sh-property: #a5d6ff;
+  --sh-entity: #d2a8ff;
+  --sh-jsxliterals: #bf7af0;
+}
+.sh__line {
+  display: block;
+  min-height: 2em;
+}
+.sh__line:empty {
+  min-height: 1em;
+}
+.sh__token--keyword {
+  font-weight: 600;
+}
+.sh__token--comment {
+  font-style: normal;
+}
+
+/* the one authored motion moment: exhibit lines assemble as they enter */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .ex {
+      animation: ex-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+      animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes ex-rise {
+      from {
+        opacity: 0;
+        transform: translateX(-14px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+  }
 }

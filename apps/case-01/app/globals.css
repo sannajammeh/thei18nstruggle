@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+html {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+:root {
+  --background: #0a0a0a;
+  --panel: #111111;
+  --line: #232323;
+  --foreground: #e8e8e6;
+  --dim: #8a8a86;
+  --faint: #55554f;
+  --accent: #ff4a3a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-panel: var(--panel);
+  --color-line: var(--line);
+  --color-foreground: var(--foreground);
+  --color-dim: var(--dim);
+  --color-faint: var(--faint);
+  --color-accent: var(--accent);
+  --color-ok: #3fbf6f;
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* browser surfaces, themed */
+::selection {
+  background: #e8e8e6;
+  color: #0a0a0a;
+}
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3a3a3a;
+}
+
+/* immersive vignette — fixed, non-interactive */
+.vig {
+  position: fixed;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  z-index: 40;
+}
+.vig-top {
+  top: 0;
+  height: 220px;
+  background: linear-gradient(
+    180deg,
+    rgba(5, 5, 5, 0.9) 60px,
+    rgba(5, 5, 5, 0)
+  );
+}
+.vig-bottom {
+  bottom: 0;
+  height: 170px;
+  background: linear-gradient(0deg, rgba(5, 5, 5, 0.88), rgba(5, 5, 5, 0));
+}
+@media (max-width: 640px) {
+  .vig-top {
+    height: 160px;
+  }
+  .vig-bottom {
+    height: 120px;
+  }
+}
