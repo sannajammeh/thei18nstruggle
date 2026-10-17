@@ -139,7 +139,7 @@ describe("getOutcome", () => {
 
   test("invalid cookie values are ignored", async () => {
     const request = makeRequest("https://example.com/", {
-      cookies: { NEXT_LOCALE: "xx-XX" },
+      cookies: { ROUTER_LOCALE: "xx-XX" },
       headers: { "accept-language": "en" },
     });
     const outcome = await getOutcome(
@@ -155,7 +155,7 @@ describe("getOutcome", () => {
 describe("geolocation: force (default)", () => {
   test("overrides the region of a stored preference, no matter what", async () => {
     const request = makeRequest("https://example.com/products", {
-      cookies: { NEXT_LOCALE: "sv-SE" },
+      cookies: { ROUTER_LOCALE: "sv-SE" },
       headers: { "accept-language": "sv-SE" },
     });
     const outcome = await getOutcome(
@@ -171,7 +171,7 @@ describe("geolocation: force (default)", () => {
 
   test("does not re-cookie when geo agrees with the preference", async () => {
     const request = makeRequest("https://example.com/", {
-      cookies: { NEXT_LOCALE: "en-US" },
+      cookies: { ROUTER_LOCALE: "en-US" },
       headers: { "accept-language": "en" },
     });
     const outcome = await getOutcome(
@@ -188,7 +188,7 @@ describe("geolocation: force (default)", () => {
 describe("geolocation: initial", () => {
   test("an existing locale cookie wins over the geo region", async () => {
     const request = makeRequest("https://example.com/products", {
-      cookies: { NEXT_LOCALE: "sv-SE" },
+      cookies: { ROUTER_LOCALE: "sv-SE" },
       headers: { "accept-language": "sv-SE" },
     });
     const outcome = await getOutcome(
@@ -220,7 +220,7 @@ describe("without geolocation", () => {
   // geo null = geolocate skipped: routing falls back to the cookie, then negotiation.
   test("a stored preference is respected", async () => {
     const request = makeRequest("https://example.com/products", {
-      cookies: { NEXT_LOCALE: "sv-SE" },
+      cookies: { ROUTER_LOCALE: "sv-SE" },
     });
     const outcome = await getOutcome(
       request,
@@ -234,7 +234,7 @@ describe("without geolocation", () => {
 
   test("preference for the default locale rewrites the root subtree", async () => {
     const request = makeRequest("https://example.com/", {
-      cookies: { NEXT_LOCALE: "en-US" },
+      cookies: { ROUTER_LOCALE: "en-US" },
     });
     const outcome = await getOutcome(
       request,

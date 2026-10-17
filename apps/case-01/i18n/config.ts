@@ -5,6 +5,7 @@ export const routing: Routing = {
 
   locales: ["en-US", "en-SE", "en-FR", "sv-SE", "fr-FR"],
   geolocation: "force",
+  localePrefix: "as-needed",
   groups: [
     {
       language: "en",

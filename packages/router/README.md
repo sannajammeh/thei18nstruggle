@@ -128,7 +128,7 @@ const routing: Routing = {
   geolocation: "force", // default; "initial" defers to an existing locale cookie
   cookies: {
     // all optional, defaults shown:
-    locale: "NEXT_LOCALE",
+    locale: "ROUTER_LOCALE",
     bypass: "X-BYPASS-GEOLOCATION",
     localeMaxAge: 60 * 60 * 24 * 365,
     bypassMaxAge: 60 * 60 * 24 * 7,
