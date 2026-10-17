@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { isCommercialOnly } from "../src/groups.ts";
+import { isConsolidated } from "../src/groups.ts";
 import { localePath } from "../src/path.ts";
 import {
   getHtmlLang,
@@ -34,10 +34,10 @@ describe("indexable derivation", () => {
 });
 
 describe("seo utilities", () => {
-  test("commercial-only locales canonicalize back to their group", () => {
-    expect(isCommercialOnly(blueprintConfig, "en-SE")).toBe(true);
-    expect(isCommercialOnly(blueprintConfig, "sv-NO")).toBe(true);
-    expect(isCommercialOnly(blueprintConfig, "en-FR")).toBe(false);
+  test("consolidated locales canonicalize back to their group", () => {
+    expect(isConsolidated(blueprintConfig, "en-SE")).toBe(true);
+    expect(isConsolidated(blueprintConfig, "sv-NO")).toBe(true);
+    expect(isConsolidated(blueprintConfig, "en-FR")).toBe(false);
     expect(isIndexable(blueprintConfig, "en-SE")).toBe(false);
     expect(isIndexable(blueprintConfig, "en-FR")).toBe(true);
   });

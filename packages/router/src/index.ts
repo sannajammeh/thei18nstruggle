@@ -6,7 +6,7 @@ export {
 } from "./geolocate.ts";
 export {
   canonicalLocale,
-  isCommercialOnly,
+  isConsolidated,
   languageGroup,
   localeGroup,
   type ResolvedGroup,

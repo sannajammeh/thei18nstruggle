@@ -2,7 +2,7 @@ import {
   canonicalLocale,
   getHtmlLang,
   hreflangAlternates,
-  isCommercialOnly,
+  isConsolidated,
   isIndexable,
   type Locale,
   localeGroup,
@@ -27,7 +27,7 @@ export interface ExhibitLabels {
   none: string;
   googlebot: string;
   indexable: string;
-  commercialOnly: string;
+  consolidated: string;
   canonical: string;
   group: string;
   origin: string;
@@ -151,7 +151,7 @@ export async function SeoExhibit({
   const origin = `${proto}://${host ?? "localhost:3000"}`;
 
   const canonical = canonicalLocale(routing, locale);
-  const commercialOnly = isCommercialOnly(routing, locale);
+  const consolidated = isConsolidated(routing, locale);
   const indexable = isIndexable(routing, locale);
   const group = localeGroup(routing, locale);
   const htmlLang = getHtmlLang(locale, routing);
@@ -181,15 +181,15 @@ export async function SeoExhibit({
 
       <Exhibit
         caption={labels.googlebot}
-        status={indexable ? labels.indexable : labels.commercialOnly}
+        status={indexable ? labels.indexable : labels.consolidated}
         tone={indexable ? "ok" : "bad"}
       >
         <Line
-          kind={commercialOnly ? "bad" : "ok"}
+          kind={consolidated ? "bad" : "ok"}
           label={labels.canonical}
-          value={commercialOnly ? locale : canonical}
+          value={consolidated ? locale : canonical}
         />
-        {commercialOnly && <Line kind="ok" value={`→ ${canonical}`} />}
+        {consolidated && <Line kind="ok" value={`→ ${canonical}`} />}
         <Line
           label={labels.group}
           value={

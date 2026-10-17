@@ -81,7 +81,7 @@ export function canonicalLocale(config: Routing, locale: string): Locale {
 }
 
 /** A grouped member that is not its group's canonical: noindex, canonical points to the canonical. */
-export function isCommercialOnly(config: Routing, locale: string): boolean {
+export function isConsolidated(config: Routing, locale: string): boolean {
   const normalized = normalizeLocale(locale);
   if (!normalized) return false;
   const group = localeGroup(config, normalized);

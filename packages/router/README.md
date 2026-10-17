@@ -139,7 +139,7 @@ const routing: Routing = {
 
 Indexable locales are derived: every group canonical + every locale excluded
 from its group + every locale covered by no group. Everything else is
-commercial-only: reachable, noindex, canonicalizing back to its group.
+consolidated: reachable, noindex, canonicalizing back to its group.
 
 ## SEO utilities
 
@@ -151,12 +151,12 @@ import {
   canonicalLocale,
   hreflangAlternates,
   indexableLocales,
-  isCommercialOnly,
+  isConsolidated,
   isIndexable,
 } from "@concept/router";
 
 indexableLocales(routing); // ["en-US", "sv-SE", "fr-FR", "en-FR"]
-isCommercialOnly(routing, "en-SE"); // true → noindex, canonical → en-US
+isConsolidated(routing, "en-SE"); // true → noindex, canonical → en-US
 canonicalLocale(routing, "en-SE"); // "en-US"
 hreflangAlternates(routing, "https://example.com");
 // [{ hreflang: "x-default", href: "https://example.com/" },

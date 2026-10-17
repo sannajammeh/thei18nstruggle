@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import {
   canonicalLocale,
-  isCommercialOnly,
+  isConsolidated,
   languageGroup,
   localeGroup,
   resolveGroups,
@@ -73,7 +73,7 @@ describe("resolveGroups", () => {
 });
 
 describe("group lookups", () => {
-  test("localeGroup, languageGroup, canonicalLocale, isCommercialOnly", () => {
+  test("localeGroup, languageGroup, canonicalLocale, isConsolidated", () => {
     expect(localeGroup(blueprintConfig, "en-SE")?.canonicalLocale).toBe(
       "en-US",
     );
@@ -81,9 +81,9 @@ describe("group lookups", () => {
     expect(canonicalLocale(blueprintConfig, "en-SE")).toBe("en-US");
     expect(canonicalLocale(blueprintConfig, "en-FR")).toBe("en-FR"); // unique → itself
     expect(canonicalLocale(blueprintConfig, "en-US")).toBe("en-US");
-    expect(isCommercialOnly(blueprintConfig, "en-SE")).toBe(true);
-    expect(isCommercialOnly(blueprintConfig, "en-FR")).toBe(false);
-    expect(isCommercialOnly(flexibleConfig(), "sv-NO")).toBe(true);
+    expect(isConsolidated(blueprintConfig, "en-SE")).toBe(true);
+    expect(isConsolidated(blueprintConfig, "en-FR")).toBe(false);
+    expect(isConsolidated(flexibleConfig(), "sv-NO")).toBe(true);
     expect(localeGroup(blueprintConfig, "xx-XX")).toBeUndefined();
   });
 });
