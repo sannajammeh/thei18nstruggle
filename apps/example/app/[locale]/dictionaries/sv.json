@@ -1,6 +1,6 @@
 {
   "home": {
-    "title": "example",
+    "title": "Locale-grupper",
     "description": "Localitysberoende routing. Du ser den svenska ordboken, serverad från din valda lokalisering {locale}."
   },
   "selector": {

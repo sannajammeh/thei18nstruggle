@@ -1,6 +1,6 @@
 {
   "home": {
-    "title": "example",
+    "title": "Groupes de locales",
     "description": "Routage par locale. Vous consultez le dictionnaire français, servi depuis votre locale sélectionnée {locale}."
   },
   "selector": {
