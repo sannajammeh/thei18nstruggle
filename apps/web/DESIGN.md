@@ -81,7 +81,7 @@ A near-black instrument report. The page is monochrome typography on void black;
 A grayscale instrument panel with one alarm color. White is assertion, ash is commentary, ghost is chrome, red is fault.
 
 ### Primary
-- **Diagnostic Red** (#ff4a3a): section-number labels, broken-URL strikethroughs, ✗ transcript lines, "broken" status tags, hover states on links and outline buttons. Never on the headline "sucks." and never as a surface.
+- **Diagnostic Red** (#ff4a3a): section-number labels, broken-URL strikethroughs, ✗ transcript lines, "broken" status tags, hover states on links and outline buttons, and the headline "Sucks." Never as a surface.
 
 ### Neutral
 - **Void Black** (#0a0a0a): page ground.
@@ -93,7 +93,7 @@ A grayscale instrument panel with one alarm color. White is assertion, ash is co
 - **Signal Green** (#3fbf6f): ✓ lines and "proposed" status only — the fix, in one color.
 
 ### Named Rules
-**The Diagnostic Red Rule.** Red appears only on small diagnostic marks and hover states. It never touches the headline "sucks.", never fills a surface, never exceeds a text-line's worth of pixels at rest.
+**The Diagnostic Red Rule.** Red appears on small diagnostic marks, hover states, and the headline "Sucks." — user-approved. It never fills a surface and never exceeds a text-line's worth of pixels outside those uses.
 
 **The Dissolve Rule.** The page's edges are black voids. Content near the top or bottom of the viewport fades toward `rgba(5,5,5,.9)` under fixed, non-interactive vignettes. New surfaces keep this immersion; never replace it with hard edges or opaque bars.
 
@@ -140,6 +140,7 @@ Rounded rectangles, small radii only: 8px on exhibit panels, 6px on buttons, 4px
 - **Caption bar:** 11px Geist Mono uppercase, 0.14em tracking, ash-toned; caption left, status right ("broken" in red, "proposed" in green).
 - **Body:** 14px/2 Geist Mono lines; broken URLs struck through in red, ✗ lines red, ✓ lines green, commentary in ghost.
 - **Motion:** lines rise 14px with exponential ease-out as they enter the viewport (scroll-driven, `cubic-bezier(0.16,1,0.3,1)`); reduced-motion and unsupported browsers see static lines.
+- **SERP variant (user-approved exception):** one figure renders Google dark-mode anatomy — `#202124` fill, pill search bar, favicon circle, `›` breadcrumbs, `#8ab4f8` underlined titles, `#bdc1c6` snippets, sans-serif. The caption bar and red PA annotations stay site-branded; this is a deliberate exhibit of Google's own surface, not a new container pattern.
 
 ### Navigation
 - **Style:** static header, no border, no blur; bold wordmark with "sucks" dimmed to ash; no nav links.

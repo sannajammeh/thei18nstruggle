@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { ReactNode } from "react";
 import { useId } from "react";
 import { highlight } from "sugar-high";
@@ -10,34 +11,42 @@ function Dek({ children }: { children: ReactNode }) {
   );
 }
 
+function Quote({ children }: { children: ReactNode }) {
+  return <blockquote className="quote">{children}</blockquote>;
+}
+
 function Figure({
   caption,
   status,
   tone,
   code,
+  variant,
   children,
 }: {
   caption: string;
-  status: string;
+  status?: string;
   tone?: "bad" | "ok";
   code?: string;
+  variant?: "serp";
   children?: ReactNode;
 }) {
   return (
     <figure className="mt-11 overflow-hidden rounded-lg border border-line bg-panel">
       <figcaption className="flex items-center justify-between gap-4 border-b border-line px-4 py-2.5 font-mono text-[11px] uppercase tracking-[0.14em] text-dim">
         <span>{caption}</span>
-        <span
-          className={
-            tone === "bad"
-              ? "text-accent"
-              : tone === "ok"
-                ? "text-ok"
-                : undefined
-          }
-        >
-          {status}
-        </span>
+        {status ? (
+          <span
+            className={
+              tone === "bad"
+                ? "text-accent"
+                : tone === "ok"
+                  ? "text-ok"
+                  : undefined
+            }
+          >
+            {status}
+          </span>
+        ) : null}
       </figcaption>
       {code !== undefined ? (
         <pre
@@ -47,6 +56,8 @@ function Figure({
             __html: highlight(code, { lang: "typescript" }).replace(/\n/g, ""),
           }}
         />
+      ) : variant === "serp" ? (
+        <div className="serp-body">{children}</div>
       ) : (
         <pre className="overflow-x-auto p-4 font-mono text-sm leading-[2]">
           {children}
@@ -56,30 +67,62 @@ function Figure({
   );
 }
 
-function Line({
-  kind = "plain",
-  url,
-  note,
-}: {
-  kind?: "bad" | "good" | "no" | "plain" | "muted";
-  url: string;
-  note?: string;
-}) {
-  const cls =
-    kind === "bad"
-      ? "ex ex-bad"
-      : kind === "no"
-        ? "ex no"
-        : kind === "good"
-          ? "ex ok"
-          : kind === "muted"
-            ? "ex muted"
-            : "ex";
+function SerpSearch({ query }: { query: string }) {
   return (
-    <span className={cls}>
-      {url}
-      {note ? <span className="cm">{`   ${note}`}</span> : null}
-    </span>
+    <div className="serp-search">
+      <svg
+        aria-hidden
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      >
+        <title>Search</title>
+        <circle cx="7" cy="7" r="4.75" />
+        <path d="M10.5 10.5L14 14" strokeLinecap="round" />
+      </svg>
+      {query}
+    </div>
+  );
+}
+
+function SerpResult({
+  site,
+  path,
+  title,
+  snippet,
+  note,
+  indent,
+}: {
+  site: string;
+  path?: string;
+  title: string;
+  snippet: string;
+  note?: string;
+  indent?: boolean;
+}) {
+  return (
+    <div className={indent ? "serp-result serp-indent" : "serp-result"}>
+      <div className="serp-crumbs">
+        <span aria-hidden className="serp-fav">
+          e
+        </span>
+        <span className="serp-domain">{site}</span>
+        {path ? (
+          <>
+            <span aria-hidden className="serp-sep">
+              ›
+            </span>
+            <span>{path}</span>
+          </>
+        ) : null}
+        {note ? <span className="serp-note">{note}</span> : null}
+      </div>
+      <div className="serp-title">{title}</div>
+      <div className="serp-snippet">{snippet}</div>
+    </div>
   );
 }
 
@@ -91,7 +134,7 @@ function Section({
 }: {
   id: string;
   num: string;
-  title: string;
+  title?: string;
   children?: ReactNode;
 }) {
   return (
@@ -100,9 +143,11 @@ function Section({
         <p className="font-mono text-xs uppercase tracking-[0.28em] text-accent">
           {num}
         </p>
-        <h2 className="mt-4 text-[clamp(24px,3vw,32px)] font-semibold leading-[1.15] tracking-[-0.02em]">
-          {title}
-        </h2>
+        {title ? (
+          <h2 className="mt-4 text-[clamp(24px,3vw,32px)] font-semibold leading-[1.15] tracking-[-0.02em]">
+            {title}
+          </h2>
+        ) : null}
         {children}
       </div>
     </section>
@@ -111,9 +156,9 @@ function Section({
 
 export default function Home() {
   const topId = useId();
-  const hardId = useId();
+  const introId = useId();
   const problemId = useId();
-  const seoId = useId();
+  const brokenId = useId();
   const fixId = useId();
   const codeId = useId();
 
@@ -122,157 +167,145 @@ export default function Home() {
       <div aria-hidden className="vig vig-top" />
       <div aria-hidden className="vig vig-bottom" />
 
-      <header>
-        <div className="mx-auto flex h-[60px] max-w-[720px] items-center px-6">
-          <a
-            href={`#${topId}`}
-            className="text-[15px] font-bold tracking-tight"
-          >
-            i18n<span className="text-dim">sucks</span>
-          </a>
-        </div>
-      </header>
-
       <main id={topId}>
         {/* hero */}
         <section className="px-6 pb-28 pt-36">
           <div className="mx-auto max-w-[720px]">
-            <p className="font-mono text-xs uppercase tracking-[0.28em] text-dim">
-              an opinion · no framework was harmed
-            </p>
             <h1 className="mt-5 text-[clamp(40px,5.5vw,64px)] font-bold leading-[1.04] tracking-[-0.025em]">
-              i18n
-              <br />
-              sucks.
+              i18n <span className="text-accent">Sucks.</span>
             </h1>
-            <Dek>
-              Your store needs different prices, currency, and shipping for
-              every country. Google needs one clean page per content. Locale
-              grouping is the structure that gives both.
-            </Dek>
-            <div className="mt-11 flex items-center gap-4">
-              <a
-                href={`#${hardId}`}
-                className="rounded-md border border-foreground bg-foreground px-5 py-3 text-sm font-semibold text-background transition-colors hover:border-[#cfcecb] hover:bg-[#cfcecb]"
-              >
-                Read the diagnosis
-              </a>
-              <span className="font-mono text-xs text-dim">
-                5 min · no signup
-              </span>
-            </div>
+            <Dek>And here&rsquo;s how to make it better.</Dek>
+            <p className="mt-6 flex items-center gap-3 font-mono text-xs uppercase tracking-[0.28em] text-dim">
+              <Image
+                src="/avatar.jpg"
+                alt=""
+                width={28}
+                height={28}
+                className="rounded-full"
+                priority
+              />
+              By Sanna Jammeh
+            </p>
           </div>
         </section>
 
-        <Section
-          id={hardId}
-          num="01 — i18n is hard"
-          title="Everyone underestimates it."
-        >
+        {/* 01 — the geo popup */}
+        <Section id={introId} num="01">
           <Dek>
-            International e-commerce has real, non-negotiable requirements:
-            every country gets its own prices, currency, shipping rules, and
-            availability. The industry&rsquo;s default answer is to spawn an
-            indexable locale for every market and hope hreflang sorts it out.
-            That default is the bug.
+            Your site competes with itself, and it&rsquo;s not your fault.
+            Multi-lingual and multi-market sites are notoriously difficult to
+            get right on the SEO side. Have you ever wondered why you sometimes
+            get a &ldquo;We see that you&rsquo;re browsing from{" "}
+            <code>{"<country>"}</code>&rdquo; popup on ecommerce sites? Me too
+            &mdash; I&rsquo;ve implemented several of them. They exist to solve
+            a problem:
+          </Dek>
+          <Quote>
+            My user has navigated to an American site, but they&rsquo;re in
+            Norway, how do I get them back?
+          </Quote>
+          <Dek>
+            But this is only a symptom of a deeper problem; why are they on an
+            American version of the site in the first place?
           </Dek>
         </Section>
 
+        {/* 02 — the core problem */}
         <Section
           id={problemId}
-          num="02 — the problem"
+          num="02 — the core problem"
           title="Your pages compete with themselves."
         >
           <Dek>
-            Give every market its own indexed locale and identical content
-            multiplies into separate pages. <code>en-SE</code>,{" "}
-            <code>en-NO</code> and <code>en-GB</code> carry the same products
-            and the same words as <code>en-US</code>. Identical content competes
-            on Page Authority: Google picks one winner, and yours splits across
-            every market you launch.
+            The industry has settled on leveraging BCP-47 locales to separate
+            languages and markets. This all makes sense, until content starts
+            looking a bit too similar.
           </Dek>
-          <Figure
-            caption="Exhibit A — the uncollapsed market"
-            status="broken"
-            tone="bad"
-          >
-            <Line url="/en-US" note="← indexed" />
-            <Line url="/en-SE" note="← indexed, same products, same words" />
-            <Line url="/en-NO" note="← indexed, same products, same words" />
-            <Line url="/en-GB" note="← indexed, same products, same words" />
-            <Line kind="no" url="✗ one page of content, four canonicals" />
-          </Figure>
+          <Dek>
+            Picture this: you sell the same products to Norway in NOK, the
+            United States in USD, France in EUR, and Germany in EUR &mdash; and
+            for all of these you support English and the region&rsquo;s native
+            language.
+          </Dek>
         </Section>
 
+        {/* 03 — why the results are broken */}
         <Section
-          id={seoId}
-          num="03 — google seo"
-          title="Google reads the mess literally."
+          id={brokenId}
+          num="03 — the fallout"
+          title="Why the results are broken."
         >
           <Dek>
-            The crawler doesn&rsquo;t know <code>en-SE</code> is{" "}
-            <code>en-US</code> with Swedish prices. Nothing structural says so —
-            the URLs are distinct, the content parses as distinct, and the only
-            glue is reciprocal hreflang across dozens of locale URLs. Duplicates
-            compete for the same queries, signals dilute, and the index fills
-            with pages that exist only to hold a price.
+            Picture a searcher in the default market &mdash; <code>en-US</code>.
+            The query should belong to the root. Instead, the results page
+            answers with locale-prefixed duplicates:
           </Dek>
-          <Figure caption="Exhibit B — what Google sees" status="index">
-            <Line kind="muted" url="$ crawl https://example.com" />
-            <Line url="/en-US" note="indexed" />
-            <Line kind="no" url="/en-SE" note="duplicate of /en-US" />
-            <Line kind="no" url="/en-GB" note="duplicate of /en-US" />
-            <Line
-              kind="no"
-              url="✗ hreflang: every URL points at every other URL"
+          <Figure caption="Exhibit — the search results page" variant="serp">
+            <SerpSearch query="coats" />
+            <SerpResult
+              site="example.com"
+              title="Home"
+              snippet="Coats and outerwear, shipped to your market."
+            />
+            <SerpResult
+              site="example.com"
+              path="en-no › coats"
+              title="Coats"
+              snippet="Coats — outerwear for every season."
+              note="higher PA"
+              indent
+            />
+            <SerpResult
+              site="example.com"
+              path="en-de"
+              title="Home"
+              snippet="Coats and outerwear, shipped to your market."
+              note="higher PA, outcompetes Jackets"
+              indent
+            />
+            <SerpResult
+              site="example.com"
+              path="jackets"
+              title="Jackets"
+              snippet="Jackets — layers for every climate."
+              indent
             />
           </Figure>
+          <Dek>
+            When Google sees similar content, alternate hrefs become invalid.
+            Google begins showing results sorted on Page Authority rather than
+            region authority. The result is a search results page that &mdash;
+            yes &mdash; shows the correctly ranked pages, but shows them with
+            completely different locale prefixes, causing users to navigate to
+            the wrong place.
+          </Dek>
         </Section>
 
+        {/* 04 — the fix */}
         <Section
           id={fixId}
-          num="04 — the solution"
-          title="Group markets by language."
+          num="04 — the fix"
+          title="Language-specific locale groups."
         >
           <Dek>
-            Group content-identical markets by language and collapse each group
-            to one indexed canonical. The English group lives at the root — the
-            only English URL search engines index. Markets with genuinely
-            different products stay unique and fully indexed, carrying the full
-            locale in their <code>lang</code> attribute: <code>en-FR</code>, not{" "}
-            <code>en</code>. Every other locale still exists — real currency,
-            real prices, real shipping — but noindexed, canonicalized back to
-            its group, reachable only by humans. Crawlers are never redirected;
-            visitors are 307&rsquo;d into their commercial locale and a cookie
-            keeps them there.
+            If pages are identical between <code>en-NO</code> and{" "}
+            <code>en-SE</code>, the ideal path is to only index a single
+            variation of them in Google. This may seem counterintuitive:
           </Dek>
-          <Figure caption="What search engines see" status="indexed" tone="ok">
-            <Line
-              kind="good"
-              url="example.com"
-              note="← en-US · canonical for the English group"
-            />
-            <Line kind="good" url="/sv-SE" note="← the Swedish canonical" />
-            <Line kind="good" url="/fr-FR" note="← the French canonical" />
-            <Line
-              kind="good"
-              url="/en-FR"
-              note="← excluded from the group · unique, fully indexed"
-            />
-            <Line
-              kind="muted"
-              url="/en-SE …"
-              note="consolidated → noindex, canonical to root"
-            />
-          </Figure>
-          <Figure caption="The canonical policy" status="policy">
-            <Line kind="muted" url="URL              indexed   canonical to" />
-            <Line url="example.com      yes       itself" />
-            <Line url="/sv-SE            yes       itself" />
-            <Line url="/fr-FR            yes       itself" />
-            <Line url="/en-FR            yes       itself" />
-            <Line url="/en-SE            no        example.com" />
-          </Figure>
+          <Quote>
+            How will our users see different prices for their respective
+            products?
+          </Quote>
+          <Dek>
+            The answer to that is simple: Google uses more data than pages to
+            show accurate product suggestions &mdash; JSON-LD, Merchant feeds,
+            and so on.
+          </Dek>
+          <Dek>
+            The users themselves will be forced into the correct respective
+            locale by performing geolocation upon entering the site. Google, on
+            the other hand, is not.
+          </Dek>
         </Section>
 
         {/* close */}
