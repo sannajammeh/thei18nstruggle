@@ -1,9 +1,12 @@
 import { describe, expect, test } from "bun:test";
 import {
+  localePath,
+  localizePath,
   matchLocalePath,
   stripLocalePrefix,
   withLocalePrefix,
 } from "../src/path.ts";
+import type { Routing } from "../src/types.ts";
 
 describe("path utilities", () => {
   const locales = ["en-US", "sv-SE", "en-FR"] as const;
@@ -56,5 +59,33 @@ describe("path utilities", () => {
       pathname: "/products",
       locale: null,
     });
+  });
+
+  test("localePath builds with config last", () => {
+    const config: Routing = {
+      defaultLocale: "en-US",
+      locales: [...locales],
+      groups: [],
+    };
+    expect(localePath("/", "sv-SE", config)).toBe("/sv-SE");
+    expect(localePath("/products", "en-US", config)).toBe("/products");
+  });
+
+  test("localizes a pathname to another locale", () => {
+    const config: Routing = {
+      defaultLocale: "en-US",
+      locales: [...locales],
+      groups: [],
+    };
+    // prefixed → re-prefixed
+    expect(localizePath("/en-FR/products", "sv-SE", config)).toBe(
+      "/sv-SE/products",
+    );
+    // unprefixed → prefixed
+    expect(localizePath("/products", "sv-SE", config)).toBe("/sv-SE/products");
+    // to the default locale under as-needed → unprefixed
+    expect(localizePath("/sv-SE/products", "en-US", config)).toBe("/products");
+    // unknown first segment passes through untouched
+    expect(localizePath("/api/keys", "sv-SE", config)).toBe("/sv-SE/api/keys");
   });
 });

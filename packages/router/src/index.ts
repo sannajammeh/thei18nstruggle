@@ -15,9 +15,8 @@ export {
 } from "./groups.ts";
 export {
   joinLocale,
-  localeLanguage,
-  localeRegion,
   normalizeLocale,
+  parseLocale,
 } from "./locale.ts";
 export {
   getOutcome,
@@ -28,8 +27,8 @@ export {
 export {
   type LocalePath,
   localePath,
+  localizePath,
   matchLocalePath,
-  stripLocalePrefix,
   withLocalePrefix,
 } from "./path.ts";
 export {

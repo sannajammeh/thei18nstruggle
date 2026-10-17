@@ -1,4 +1,4 @@
-import { localeLanguage, normalizeLocale } from "./locale.ts";
+import { normalizeLocale, parseLocale } from "./locale.ts";
 import type { Language, Locale, Routing, WildcardLocale } from "./types.ts";
 
 /** A group with wildcards expanded, unknown locales dropped, and excludes applied. */
@@ -97,7 +97,8 @@ function expand(
     if (entry.endsWith("-*")) {
       const wildcardLanguage = entry.slice(0, -2).toLowerCase();
       for (const locale of localeSet) {
-        if (localeLanguage(locale) === wildcardLanguage) result.push(locale);
+        if (parseLocale(locale)?.language === wildcardLanguage)
+          result.push(locale);
       }
       continue;
     }

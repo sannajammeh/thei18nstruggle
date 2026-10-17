@@ -1,21 +1,11 @@
-import type { Language, Locale, Region } from "./types.ts";
+import type { Locale } from "./types.ts";
 
-export function normalizeLocale(
-  raw: string | null | undefined,
-): Locale | undefined {
-  if (!raw) return undefined;
-  try {
-    const parsed = new Intl.Locale(raw.trim().replace(/_/g, "-"));
-    const language = parsed.language?.toLowerCase();
-    const region = parsed.region?.toUpperCase();
-    if (!language || !region) return undefined;
-    return `${language}-${region}` as Locale;
-  } catch {
-    return undefined;
-  }
-}
-
-function parse(locale: string): Intl.Locale | undefined {
+/**
+ * Parses a BCP 47 tag into the platform `Intl.Locale`; underscores are
+ * accepted as subtag separators and invalid input yields `undefined`
+ * instead of throwing.
+ */
+export function parseLocale(locale: string): Intl.Locale | undefined {
   try {
     return new Intl.Locale(locale.trim().replace(/_/g, "-"));
   } catch {
@@ -23,12 +13,15 @@ function parse(locale: string): Intl.Locale | undefined {
   }
 }
 
-export function localeLanguage(locale: string): Language | undefined {
-  return parse(locale)?.language?.toLowerCase();
-}
-
-export function localeRegion(locale: string): Region | undefined {
-  return parse(locale)?.region?.toUpperCase();
+export function normalizeLocale(
+  raw: string | null | undefined,
+): Locale | undefined {
+  if (!raw) return undefined;
+  const parsed = parseLocale(raw);
+  const language = parsed?.language?.toLowerCase();
+  const region = parsed?.region?.toUpperCase();
+  if (!language || !region) return undefined;
+  return `${language}-${region}` as Locale;
 }
 
 export function joinLocale(

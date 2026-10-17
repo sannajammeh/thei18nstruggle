@@ -1,6 +1,31 @@
 {
   "home": {
     "title": "example",
-    "description": "Localitysberoende routing. Du ser den svenska ordboken, serverad från din valda lokalisering."
+    "description": "Localitysberoende routing. Du ser den svenska ordboken, serverad från din valda lokalisering {locale}."
+  },
+  "selector": {
+    "language": "Språk",
+    "country": "Land",
+    "apply": "Använd",
+    "reset": "Använd min region"
+  },
+  "exhibit": {
+    "visitor": "besökare",
+    "live": "live",
+    "url": "url",
+    "served": "serverad",
+    "preference": "preferens",
+    "geo": "geo",
+    "lang": "lang",
+    "forced": "tvingad",
+    "none": "—",
+    "googlebot": "googlebot",
+    "indexable": "indexerbar",
+    "commercialOnly": "endast kommersiell",
+    "canonical": "kanonisk",
+    "group": "grupp",
+    "origin": "ursprung",
+    "hreflang": "hreflang",
+    "bareLangNote": "grupperade marknader publicerar språket ensamt"
   }
 }

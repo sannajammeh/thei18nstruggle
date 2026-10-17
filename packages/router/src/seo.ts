@@ -1,5 +1,5 @@
 import { isCommercialOnly, resolveGroups, resolveLocales } from "./groups.ts";
-import { localeLanguage, normalizeLocale } from "./locale.ts";
+import { normalizeLocale, parseLocale } from "./locale.ts";
 import { localePath } from "./path.ts";
 import type { Locale, Routing } from "./types.ts";
 
@@ -42,7 +42,7 @@ export function hreflangAlternates(
     { hreflang: "x-default", href: new URL("/", base).toString() },
     ...indexableLocales(config).map((locale) => ({
       hreflang: locale,
-      href: new URL(localePath(config, locale), base).toString(),
+      href: new URL(localePath("/", locale, config), base).toString(),
     })),
   ];
 }
@@ -52,7 +52,7 @@ export function localeUrl(
   locale: string,
   origin: string,
 ): string {
-  return new URL(localePath(config, locale), origin).toString();
+  return new URL(localePath("/", locale, config), origin).toString();
 }
 
 /**
@@ -64,6 +64,6 @@ export function getHtmlLang(locale: string, config: Routing): string {
   const normalized = normalizeLocale(locale);
   if (!normalized) return locale;
   return isCommercialOnly(config, normalized)
-    ? (localeLanguage(normalized) ?? normalized)
+    ? (parseLocale(normalized)?.language ?? normalized)
     : normalized;
 }

@@ -78,6 +78,6 @@ describe("seo utilities", () => {
     expect(svSE?.href).toBe("https://example.com/sv-SE");
     const enUS = alternates.find((a) => a.hreflang === "en-US");
     expect(enUS?.href).toBe("https://example.com/");
-    expect(localePath(flexibleConfig(), "sv-NO")).toBe("/sv-NO");
+    expect(localePath("/", "sv-NO", flexibleConfig())).toBe("/sv-NO");
   });
 });

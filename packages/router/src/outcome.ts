@@ -2,7 +2,7 @@ import { RequestCookies } from "@edge-runtime/cookies";
 import { resolveCookies } from "./cookies.ts";
 import { isCrawler } from "./crawler.ts";
 import { resolveLocales } from "./groups.ts";
-import { joinLocale, localeLanguage, normalizeLocale } from "./locale.ts";
+import { joinLocale, normalizeLocale, parseLocale } from "./locale.ts";
 import { localePath, matchLocalePath } from "./path.ts";
 import type {
   GeoHint,
@@ -74,7 +74,7 @@ export async function getOutcome(
     }
     return redirectTo(
       url,
-      localePath(config, preferred, url.pathname),
+      localePath(url.pathname, preferred, config),
       preferred,
       config,
       false,
@@ -95,7 +95,7 @@ export function resolveTarget(
   geo?: GeoHint | null,
 ): Locale {
   const candidate = geo?.region
-    ? joinLocale(localeLanguage(locale), geo.region)
+    ? joinLocale(parseLocale(locale)?.language, geo.region)
     : undefined;
   return candidate && locales.includes(candidate) ? candidate : locale;
 }
@@ -130,7 +130,7 @@ function routeTo(
 
   return redirectTo(
     url,
-    localePath(config, target, url.pathname),
+    localePath(url.pathname, target, config),
     target,
     config,
     setCookie,

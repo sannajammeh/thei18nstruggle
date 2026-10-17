@@ -1,6 +1,31 @@
 {
   "home": {
     "title": "example",
-    "description": "Routage par locale. Vous consultez le dictionnaire français, servi depuis votre locale sélectionnée."
+    "description": "Routage par locale. Vous consultez le dictionnaire français, servi depuis votre locale sélectionnée {locale}."
+  },
+  "selector": {
+    "language": "Langue",
+    "country": "Pays",
+    "apply": "Appliquer",
+    "reset": "Utiliser ma région"
+  },
+  "exhibit": {
+    "visitor": "visiteur",
+    "live": "en direct",
+    "url": "url",
+    "served": "servi",
+    "preference": "préférence",
+    "geo": "geo",
+    "lang": "lang",
+    "forced": "forcé",
+    "none": "—",
+    "googlebot": "googlebot",
+    "indexable": "indexable",
+    "commercialOnly": "commercial uniquement",
+    "canonical": "canonique",
+    "group": "groupe",
+    "origin": "origine",
+    "hreflang": "hreflang",
+    "bareLangNote": "les membres groupés publient la langue seule"
   }
 }

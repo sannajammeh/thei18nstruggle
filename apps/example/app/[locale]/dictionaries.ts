@@ -1,4 +1,4 @@
-import { localeLanguage } from "@concept/router";
+import { parseLocale } from "@concept/router";
 import { notFound } from "next/navigation";
 
 const dictionaries = {
@@ -11,7 +11,7 @@ export type Dictionary = Awaited<ReturnType<(typeof dictionaries)["en"]>>;
 
 /** Dictionaries are keyed by language: every market in a group shares the same copy. */
 export async function getDictionary(locale: string): Promise<Dictionary> {
-  const language = localeLanguage(locale);
+  const language = parseLocale(locale)?.language;
   if (!language || !(language in dictionaries)) notFound();
   return dictionaries[language as keyof typeof dictionaries]();
 }

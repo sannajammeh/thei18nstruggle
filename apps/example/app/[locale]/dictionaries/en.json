@@ -1,6 +1,31 @@
 {
   "home": {
     "title": "example",
-    "description": "Locale-aware routing. You are viewing the English dictionary, served from the canonical root locale en-US."
+    "description": "Locale-aware routing. You are viewing the English dictionary, served from the canonical root locale {locale}."
+  },
+  "selector": {
+    "language": "Language",
+    "country": "Country",
+    "apply": "Apply",
+    "reset": "Use my region"
+  },
+  "exhibit": {
+    "visitor": "visitor",
+    "live": "live",
+    "url": "url",
+    "served": "served",
+    "preference": "preference",
+    "geo": "geo",
+    "lang": "lang",
+    "forced": "forced",
+    "none": "—",
+    "googlebot": "googlebot",
+    "indexable": "indexable",
+    "commercialOnly": "commercial-only",
+    "canonical": "canonical",
+    "group": "group",
+    "origin": "origin",
+    "hreflang": "hreflang",
+    "bareLangNote": "grouped members publish the bare language"
   }
 }

@@ -38,13 +38,27 @@ export function stripLocalePrefix(
 }
 
 export function localePath(
-  config: Routing,
+  pathname: string,
   locale: string,
-  pathname = "/",
+  config: Routing,
 ): string {
   const normalized = normalizeLocale(locale) ?? config.defaultLocale;
   return withLocalePrefix(pathname, normalized, {
     defaultLocale: config.defaultLocale,
     localePrefix: config.localePrefix ?? "as-needed",
   });
+}
+
+/**
+ * Re-home a pathname on another locale: any existing locale prefix is stripped
+ * (unknown first segments pass through untouched) and the target locale's
+ * prefix rules are applied to the remainder.
+ */
+export function localizePath(
+  pathname: string,
+  locale: string,
+  config: Routing,
+): string {
+  const { pathname: rest } = stripLocalePrefix(pathname, config.locales);
+  return localePath(rest, locale, config);
 }

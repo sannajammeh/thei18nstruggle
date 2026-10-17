@@ -70,25 +70,60 @@ body {
   pointer-events: none;
   z-index: 40;
 }
-.vig-top {
-  top: 0;
-  height: 220px;
-  background: linear-gradient(
-    180deg,
-    rgba(5, 5, 5, 0.9) 60px,
-    rgba(5, 5, 5, 0)
-  );
-}
 .vig-bottom {
   bottom: 0;
   height: 170px;
   background: linear-gradient(0deg, rgba(5, 5, 5, 0.88), rgba(5, 5, 5, 0));
 }
 @media (max-width: 640px) {
-  .vig-top {
-    height: 160px;
-  }
   .vig-bottom {
     height: 120px;
+  }
+}
+
+/* exhibit line vocabulary — evidence set in Geist Mono */
+.ex {
+  display: block;
+  white-space: pre;
+  color: var(--foreground);
+}
+.ex-bad {
+  color: var(--dim);
+  text-decoration: line-through;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 1.5px;
+}
+.ex .cm {
+  color: var(--faint);
+}
+.ex.muted {
+  color: var(--dim);
+}
+.ex.no {
+  color: var(--accent);
+}
+.ex.ok {
+  color: #3fbf6f;
+}
+
+/* the one authored motion moment: exhibit lines assemble as they enter */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .ex {
+      animation: ex-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+      animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes ex-rise {
+      from {
+        opacity: 0;
+        transform: translateX(-14px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
   }
 }
