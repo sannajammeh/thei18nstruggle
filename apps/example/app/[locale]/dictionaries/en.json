@@ -1,7 +1,7 @@
 {
   "home": {
     "title": "Locale groups",
-    "description": "Locale-aware routing. You are viewing the English dictionary, served from the canonical root locale {locale}."
+    "description": "Locale-aware routing. You are viewing the English dictionary, served as {locale}."
   },
   "selector": {
     "language": "Language",
@@ -14,6 +14,7 @@
     "live": "live",
     "url": "url",
     "served": "served",
+    "market": "market",
     "preference": "preference",
     "geo": "geo",
     "lang": "lang",

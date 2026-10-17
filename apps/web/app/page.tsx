@@ -262,7 +262,7 @@ export default function Home() {
             <Line
               kind="muted"
               url="/en-SE …"
-              note="commercial-only → noindex, canonical to root"
+              note="consolidated → noindex, canonical to root"
             />
           </Figure>
           <Figure caption="The canonical policy" status="policy">

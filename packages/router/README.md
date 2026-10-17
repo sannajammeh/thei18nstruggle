@@ -113,16 +113,27 @@ Redirects carry the original path and query string.
 ```ts
 const routing: Routing = {
   defaultLocale: "en-US",
-  locales: ["en-US", "en-SE", "en-NO", "en-GB", "en-FR", "sv-SE", "sv-NO", "fr-FR"],
+  locales: [
+    "en-US", "en-GB", "en-IE", "en-SE", "en-NO", "en-DK", "en-CA", "en-AU",
+    "sv-SE", "sv-NO", "sv-FI",
+    "fr-FR", "fr-BE", "fr-CA",
+    "de-DE", "de-AT", "de-CH",
+  ],
   groups: [
     {
       language: "en",
       canonicalLocale: "en-US",
       members: ["en-*"], // wildcard: every configured en-* locale
-      exclude: ["en-FR"], // France stays unique / fully indexed
+      exclude: ["en-AU"], // different catalog → stays unique / fully indexed
     },
     { language: "sv", canonicalLocale: "sv-SE", members: ["sv-*"] },
-    { language: "fr", canonicalLocale: "fr-FR", members: ["fr-*"] },
+    {
+      language: "fr",
+      canonicalLocale: "fr-FR",
+      members: ["fr-*"],
+      exclude: ["fr-CA"], // North-American copy → stays unique
+    },
+    { language: "de", canonicalLocale: "de-DE", members: ["de-*"] },
   ],
   localePrefix: "as-needed", // default; "always" prefixes the default locale too
   geolocation: "force", // default; "initial" defers to an existing locale cookie
@@ -155,7 +166,7 @@ import {
   isIndexable,
 } from "@concept/router";
 
-indexableLocales(routing); // ["en-US", "sv-SE", "fr-FR", "en-FR"]
+indexableLocales(routing); // ["en-US", "sv-SE", "fr-FR", "de-DE", "en-AU", "fr-CA"]
 isConsolidated(routing, "en-SE"); // true → noindex, canonical → en-US
 canonicalLocale(routing, "en-SE"); // "en-US"
 hreflangAlternates(routing, "https://example.com");
@@ -164,5 +175,5 @@ hreflangAlternates(routing, "https://example.com");
 //  { hreflang: "sv-SE", href: "https://example.com/sv-SE" }, ...]
 ```
 
-Unique markets keep their full BCP 47 tag in hreflang (`en-FR`, not `en`).
+Unique markets keep their full BCP 47 tag in hreflang (`en-AU`, not `en`).
 Sitemaps should be built from `indexableLocales` only.

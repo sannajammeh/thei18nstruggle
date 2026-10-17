@@ -32,7 +32,7 @@ describe("negotiate", () => {
     });
     expect(await negotiate(wildcard, blueprintConfig)).toBe("en-US");
     const unsupported = makeRequest("https://example.com/", {
-      headers: { "accept-language": "de-DE" },
+      headers: { "accept-language": "ja-JP" },
     });
     expect(await negotiate(unsupported, blueprintConfig)).toBe("en-US");
   });

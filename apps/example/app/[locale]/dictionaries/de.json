@@ -1,0 +1,32 @@
+{
+  "home": {
+    "title": "Locale-Gruppen",
+    "description": "Locale-basiertes Routing. Sie sehen das deutsche Wörterbuch, ausgeliefert als {locale}."
+  },
+  "selector": {
+    "language": "Sprache",
+    "country": "Land",
+    "apply": "Anwenden",
+    "reset": "Meine Region verwenden"
+  },
+  "exhibit": {
+    "visitor": "Besucher",
+    "live": "live",
+    "url": "url",
+    "served": "ausgeliefert",
+    "market": "Markt",
+    "preference": "Präferenz",
+    "geo": "geo",
+    "lang": "lang",
+    "forced": "erzwungen",
+    "none": "—",
+    "googlebot": "googlebot",
+    "indexable": "indexierbar",
+    "consolidated": "konsolidiert",
+    "canonical": "kanonisch",
+    "group": "Gruppe",
+    "origin": "Ursprung",
+    "hreflang": "hreflang",
+    "bareLangNote": "konsolidierte Märkte publizieren die Sprache ohne Region"
+  }
+}

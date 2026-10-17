@@ -1,7 +1,7 @@
 {
   "home": {
     "title": "Locale-grupper",
-    "description": "Localitysberoende routing. Du ser den svenska ordboken, serverad från din valda lokalisering {locale}."
+    "description": "Localitysberoende routing. Du ser den svenska ordboken, serverad som {locale}."
   },
   "selector": {
     "language": "Språk",
@@ -14,6 +14,7 @@
     "live": "live",
     "url": "url",
     "served": "serverad",
+    "market": "marknad",
     "preference": "preferens",
     "geo": "geo",
     "lang": "lang",

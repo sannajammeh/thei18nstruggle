@@ -1,36 +1,49 @@
 import type { Routing } from "../src/types.ts";
 
-/** en-DE/en-NL are members but not in `locales` — they must be ignored, not fatal. */
+/** Mirrors the corrected example configuration in blueprint.md §3. */
 export const blueprintConfig: Routing = {
   defaultLocale: "en-US",
   locales: [
     "en-US",
+    "en-GB",
+    "en-IE",
     "en-SE",
     "en-NO",
-    "en-GB",
-    "en-FR",
+    "en-DK",
+    "en-CA",
+    "en-AU",
     "sv-SE",
     "sv-NO",
+    "sv-FI",
     "fr-FR",
     "fr-BE",
     "fr-CA",
+    "de-DE",
+    "de-AT",
+    "de-CH",
   ],
   groups: [
     {
       language: "en",
       canonicalLocale: "en-US",
-      members: ["en-US", "en-SE", "en-NO", "en-GB", "en-DE", "en-NL"],
-      exclude: ["en-FR"],
+      members: ["en-US", "en-GB", "en-IE", "en-SE", "en-NO", "en-DK", "en-CA"],
+      exclude: ["en-AU"],
     },
     {
       language: "sv",
       canonicalLocale: "sv-SE",
-      members: ["sv-SE", "sv-NO"],
+      members: ["sv-SE", "sv-NO", "sv-FI"],
     },
     {
       language: "fr",
       canonicalLocale: "fr-FR",
-      members: ["fr-FR"],
+      members: ["fr-FR", "fr-BE"],
+      exclude: ["fr-CA"],
+    },
+    {
+      language: "de",
+      canonicalLocale: "de-DE",
+      members: ["de-DE", "de-AT", "de-CH"],
     },
   ],
 };
@@ -38,8 +51,23 @@ export const blueprintConfig: Routing = {
 export function flexibleConfig(
   localePrefix: Routing["localePrefix"] = "as-needed",
 ): Routing {
-  const countries = ["US", "SE", "NO", "GB", "FR", "DE", "NL", "BE", "CA"];
-  const languages = ["en", "sv", "fr"];
+  const countries = [
+    "US",
+    "GB",
+    "IE",
+    "SE",
+    "NO",
+    "DK",
+    "AU",
+    "FI",
+    "FR",
+    "BE",
+    "CA",
+    "DE",
+    "AT",
+    "CH",
+  ];
+  const languages = ["en", "sv", "fr", "de"];
   return {
     defaultLocale: "en-US",
     locales: countries.flatMap((country) =>
@@ -50,15 +78,16 @@ export function flexibleConfig(
         language: "en",
         canonicalLocale: "en-US",
         members: ["en-*"],
-        exclude: ["en-FR"],
+        exclude: ["en-AU"],
       },
       { language: "sv", canonicalLocale: "sv-SE", members: ["sv-*"] },
       {
         language: "fr",
         canonicalLocale: "fr-FR",
         members: ["fr-*"],
-        exclude: ["fr-FR"],
+        exclude: ["fr-CA"],
       },
+      { language: "de", canonicalLocale: "de-DE", members: ["de-*"] },
     ],
     localePrefix,
   };

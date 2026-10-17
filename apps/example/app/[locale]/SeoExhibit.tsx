@@ -14,12 +14,14 @@ import {
   headers as readHeaders,
 } from "next/headers";
 import { routing } from "@/i18n/config";
+import { marketCurrency } from "@/i18n/markets";
 
 export interface ExhibitLabels {
   visitor: string;
   live: string;
   url: string;
   served: string;
+  market: string;
   preference: string;
   geo: string;
   lang: string;
@@ -112,6 +114,7 @@ export function SeoExhibitFallback({ labels }: { labels: ExhibitLabels }) {
       <Exhibit caption={labels.visitor} status={labels.live} tone="ok">
         <Line label={labels.url} value={labels.none} />
         <Line label={labels.served} value={labels.none} />
+        <Line label={labels.market} value={labels.none} />
         <Line label={labels.preference} value={labels.none} />
         <Line label={labels.geo} value={labels.none} />
         <Line label={labels.lang} value={labels.none} />
@@ -163,6 +166,7 @@ export async function SeoExhibit({
       <Exhibit caption={labels.visitor} status={labels.live} tone="ok">
         <Line label={labels.url} value={localePath("/", locale, routing)} />
         <Line label={labels.served} value={locale} />
+        <Line label={labels.market} value={marketCurrency[locale]} />
         <Line label={labels.preference} value={preference ?? labels.none} />
         {preference && preference !== locale && (
           <Line

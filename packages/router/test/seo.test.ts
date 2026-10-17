@@ -10,15 +10,13 @@ import {
 import { blueprintConfig, flexibleConfig } from "./helpers.ts";
 
 describe("indexable derivation", () => {
-  test("derives indexable locales per the blueprint", () => {
-    // fr-BE/fr-CA are covered by no group → unique markets, although the
-    // blueprint's example result omits them.
+  test("derives indexable locales per the blueprint: 16 markets collapse to 6 documents", () => {
     expect(indexableLocales(blueprintConfig)).toEqual([
       "en-US",
       "sv-SE",
       "fr-FR",
-      "en-FR",
-      "fr-BE",
+      "de-DE",
+      "en-AU",
       "fr-CA",
     ]);
   });
@@ -28,7 +26,9 @@ describe("indexable derivation", () => {
       "en-US",
       "sv-SE",
       "fr-FR",
-      "en-FR",
+      "de-DE",
+      "en-AU",
+      "fr-CA",
     ]);
   });
 });
@@ -36,10 +36,12 @@ describe("indexable derivation", () => {
 describe("seo utilities", () => {
   test("consolidated locales canonicalize back to their group", () => {
     expect(isConsolidated(blueprintConfig, "en-SE")).toBe(true);
+    expect(isConsolidated(blueprintConfig, "en-CA")).toBe(true);
     expect(isConsolidated(blueprintConfig, "sv-NO")).toBe(true);
-    expect(isConsolidated(blueprintConfig, "en-FR")).toBe(false);
+    expect(isConsolidated(blueprintConfig, "de-AT")).toBe(true);
+    expect(isConsolidated(blueprintConfig, "en-AU")).toBe(false);
     expect(isIndexable(blueprintConfig, "en-SE")).toBe(false);
-    expect(isIndexable(blueprintConfig, "en-FR")).toBe(true);
+    expect(isIndexable(blueprintConfig, "en-AU")).toBe(true);
   });
 
   test("hreflang cluster contains only indexables plus x-default at the root", () => {
@@ -57,16 +59,21 @@ describe("seo utilities", () => {
     expect(hreflangs).toEqual(indexableLocales(blueprintConfig));
     expect(hreflangs).not.toContain("en-SE");
     expect(hreflangs).not.toContain("sv-NO");
+    expect(hreflangs).not.toContain("de-AT");
     // Unique markets keep their full locale tag.
-    expect(hreflangs).toContain("en-FR");
+    expect(hreflangs).toContain("en-AU");
+    expect(hreflangs).toContain("fr-CA");
   });
 
   test("html lang carries the full tag for indexable markets, bare language for grouped", () => {
     expect(getHtmlLang("en-US", blueprintConfig)).toBe("en-US");
     expect(getHtmlLang("sv-SE", blueprintConfig)).toBe("sv-SE");
-    expect(getHtmlLang("en-FR", blueprintConfig)).toBe("en-FR");
+    expect(getHtmlLang("de-DE", blueprintConfig)).toBe("de-DE");
+    expect(getHtmlLang("en-AU", blueprintConfig)).toBe("en-AU");
     expect(getHtmlLang("en-SE", blueprintConfig)).toBe("en");
+    expect(getHtmlLang("en-CA", blueprintConfig)).toBe("en");
     expect(getHtmlLang("sv-NO", blueprintConfig)).toBe("sv");
+    expect(getHtmlLang("de-CH", blueprintConfig)).toBe("de");
   });
 
   test("alternates and localized paths honor localePrefix", () => {

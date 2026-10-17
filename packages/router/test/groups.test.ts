@@ -7,7 +7,7 @@ import {
   resolveGroups,
   resolveLocales,
 } from "../src/groups.ts";
-import type { Locale } from "../src/types.ts";
+import type { Locale, Routing } from "../src/types.ts";
 import { blueprintConfig, flexibleConfig } from "./helpers.ts";
 
 describe("resolveLocales", () => {
@@ -43,20 +43,48 @@ describe("resolveLocales", () => {
 
 describe("resolveGroups", () => {
   test("drops members that are not in locales", () => {
-    const [en] = resolveGroups(blueprintConfig);
+    const config: Routing = {
+      defaultLocale: "en-US",
+      locales: ["en-US", "en-SE"],
+      groups: [
+        {
+          language: "en",
+          canonicalLocale: "en-US",
+          members: ["en-US", "en-SE", "en-DE"],
+        },
+      ],
+    };
+    const [en] = resolveGroups(config);
+    expect(en?.members).toEqual(["en-US", "en-SE"]);
+  });
+
+  test("resolves the blueprint's market groups", () => {
+    const [en, sv, fr, de] = resolveGroups(blueprintConfig);
     expect(en?.canonicalLocale).toBe("en-US");
-    expect(en?.members).toEqual(["en-US", "en-SE", "en-NO", "en-GB"]);
+    expect(en?.members).toEqual([
+      "en-US",
+      "en-GB",
+      "en-IE",
+      "en-SE",
+      "en-NO",
+      "en-DK",
+      "en-CA",
+    ]);
+    expect(sv?.members).toEqual(["sv-SE", "sv-NO", "sv-FI"]);
+    expect(fr?.members).toEqual(["fr-FR", "fr-BE"]);
+    expect(de?.members).toEqual(["de-DE", "de-AT", "de-CH"]);
   });
 
   test("expands wildcards and applies excludes (flexible model)", () => {
     const [en, sv, fr] = resolveGroups(flexibleConfig());
     expect(en?.members).toEqual(
       flexibleConfig().locales.filter(
-        (locale) => locale.startsWith("en-") && locale !== "en-FR",
+        (locale) => locale.startsWith("en-") && locale !== "en-AU",
       ),
     );
-    expect(fr?.members).not.toContain("fr-FR"); // excluded from its own wildcard
+    expect(fr?.members).not.toContain("fr-CA"); // excluded from the wildcard
     expect(sv?.members).toContain("sv-NO");
+    expect(sv?.members).toContain("sv-FI");
   });
 
   test("rejects unknown canonical locales", () => {
@@ -79,10 +107,11 @@ describe("group lookups", () => {
     );
     expect(languageGroup(blueprintConfig, "sv")?.canonicalLocale).toBe("sv-SE");
     expect(canonicalLocale(blueprintConfig, "en-SE")).toBe("en-US");
-    expect(canonicalLocale(blueprintConfig, "en-FR")).toBe("en-FR"); // unique → itself
+    expect(canonicalLocale(blueprintConfig, "en-AU")).toBe("en-AU"); // unique → itself
     expect(canonicalLocale(blueprintConfig, "en-US")).toBe("en-US");
     expect(isConsolidated(blueprintConfig, "en-SE")).toBe(true);
-    expect(isConsolidated(blueprintConfig, "en-FR")).toBe(false);
+    expect(isConsolidated(blueprintConfig, "de-CH")).toBe(true);
+    expect(isConsolidated(blueprintConfig, "fr-CA")).toBe(false);
     expect(isConsolidated(flexibleConfig(), "sv-NO")).toBe(true);
     expect(localeGroup(blueprintConfig, "xx-XX")).toBeUndefined();
   });
