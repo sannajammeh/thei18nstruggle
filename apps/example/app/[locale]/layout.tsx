@@ -20,8 +20,8 @@ export async function generateStaticParams() {
 }
 
 export const metadata: Metadata = {
-  title: "case-01",
-  description: "case-01",
+  title: "example",
+  description: "example",
   authors: [{ name: "sannajammeh" }],
   creator: "sannajammeh",
 };
