@@ -55,6 +55,9 @@ routes, static assets, and metadata files.
 
 ## Decoupled path (Astro, other frameworks)
 
+The core stages accept any WinterCG-compliant `Request`, so the same config and
+stages run in any runtime.
+
 ```ts
 import { geolocate, getOutcome, negotiate } from "@concept/router";
 import { getResponse } from "@concept/router/next";
@@ -123,6 +126,14 @@ const routing: Routing = {
   ],
   localePrefix: "as-needed", // default; "always" prefixes the default locale too
   geolocation: "force", // default; "initial" defers to an existing locale cookie
+  cookies: {
+    // all optional, defaults shown:
+    locale: "NEXT_LOCALE",
+    bypass: "X-BYPASS-GEOLOCATION",
+    localeMaxAge: 60 * 60 * 24 * 365,
+    bypassMaxAge: 60 * 60 * 24 * 7,
+    redirectStatus: 307,
+  },
 };
 ```
 

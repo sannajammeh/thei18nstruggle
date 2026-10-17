@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { getOutcome } from "../src/outcome.ts";
+import type { Routing } from "../src/types.ts";
 import {
   blueprintConfig,
   flexibleConfig,
@@ -242,6 +243,23 @@ describe("without geolocation", () => {
     );
     expect(outcome.type).toBe("rewrite");
     expect(outcome.url).toBe("https://example.com/en-US");
+  });
+
+  test("cookie names and redirect status are configurable", async () => {
+    const config: Routing = {
+      ...blueprintConfig,
+      cookies: { locale: "MARKET", redirectStatus: 307 },
+    };
+    const request = makeRequest("https://example.com/", {
+      cookies: { MARKET: "sv-SE" },
+    });
+    const outcome = await getOutcome(
+      request,
+      { geo: null, locale: "en-US" },
+      config,
+    );
+    expect(outcome.type).toBe("redirect");
+    expect(outcome.url).toBe("https://example.com/sv-SE");
   });
 
   test("negotiation alone decides the target, without pinning a cookie", async () => {

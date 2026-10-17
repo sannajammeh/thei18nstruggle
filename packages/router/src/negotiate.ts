@@ -1,16 +1,16 @@
 import { match } from "@formatjs/intl-localematcher";
 import Negotiator from "negotiator";
 import { resolveLocales } from "./groups.ts";
-import type { Locale, RouterRequest, Routing } from "./types.ts";
+import type { Locale, MaybePromise, Routing } from "./types.ts";
 
 export type Negotiate = (
-  request: RouterRequest,
+  request: Request,
   config: Routing,
-) => Promise<Locale>;
+) => MaybePromise<Locale>;
 
 /** The browser decides the language; region-level corrections happen in getOutcome. */
 export async function negotiate(
-  request: RouterRequest,
+  request: Request,
   config: Routing,
 ): Promise<Locale> {
   const languages = new Negotiator({

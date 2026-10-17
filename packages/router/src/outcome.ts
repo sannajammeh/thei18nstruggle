@@ -1,5 +1,5 @@
 import { RequestCookies } from "@edge-runtime/cookies";
-import { LOCALE_COOKIE, REDIRECT_STATUS } from "./cookies.ts";
+import { resolveCookies } from "./cookies.ts";
 import { isCrawler } from "./crawler.ts";
 import { resolveLocales } from "./groups.ts";
 import { joinLocale, localeLanguage, normalizeLocale } from "./locale.ts";
@@ -7,8 +7,8 @@ import { localePath, matchLocalePath } from "./path.ts";
 import type {
   GeoHint,
   Locale,
+  MaybePromise,
   Outcome,
-  RouterRequest,
   Routing,
 } from "./types.ts";
 
@@ -20,17 +20,18 @@ export interface OutcomeInput {
 }
 
 export type ResolveOutcome = (
-  request: RouterRequest,
+  request: Request,
   input: OutcomeInput,
   config: Routing,
-) => Promise<Outcome>;
+) => MaybePromise<Outcome>;
 
 export async function getOutcome(
-  request: RouterRequest,
+  request: Request,
   input: OutcomeInput,
   config: Routing,
 ): Promise<Outcome> {
   const locales = resolveLocales(config);
+  const { locale: localeCookie } = resolveCookies(config);
   const url = new URL(request.url);
   const cookies = new RequestCookies(request.headers);
   const current = matchLocalePath(url.pathname, locales);
@@ -47,13 +48,13 @@ export async function getOutcome(
     return current ? serve() : rewriteToDefault(url, config);
   }
 
-  if (!/^(?:GET|HEAD)$/i.test(request.method ?? "GET")) {
+  if (!/^(?:GET|HEAD)$/i.test(request.method)) {
     return current ? serve() : rewriteToDefault(url, config);
   }
 
   if (current) return serve();
 
-  const value = cookies.get(LOCALE_COOKIE)?.value;
+  const value = cookies.get(localeCookie)?.value;
   const normalized = value ? normalizeLocale(value) : undefined;
   const preferred =
     normalized && locales.includes(normalized) ? normalized : undefined;
@@ -75,6 +76,7 @@ export async function getOutcome(
       url,
       localePath(config, preferred, url.pathname),
       preferred,
+      config,
       false,
     );
   }
@@ -130,6 +132,7 @@ function routeTo(
     url,
     localePath(config, target, url.pathname),
     target,
+    config,
     setCookie,
   );
 }
@@ -138,6 +141,7 @@ function redirectTo(
   url: URL,
   path: string,
   locale: Locale,
+  config: Routing,
   setCookie: boolean,
 ): Outcome {
   const outcome: Outcome = {
@@ -145,7 +149,7 @@ function redirectTo(
     setCookie,
     locale,
     url: new URL(path + url.search, url).toString(),
-    status: REDIRECT_STATUS,
+    status: resolveCookies(config).redirectStatus,
   };
   // Loop safety: never "redirect" to the URL we are already on.
   if (outcome.url === url.toString()) {

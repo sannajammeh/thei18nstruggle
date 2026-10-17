@@ -1,10 +1,4 @@
-export {
-  BYPASS_COOKIE,
-  BYPASS_COOKIE_MAX_AGE,
-  LOCALE_COOKIE,
-  LOCALE_COOKIE_MAX_AGE,
-  REDIRECT_STATUS,
-} from "./cookies.ts";
+export { cookieDefaults, resolveCookies } from "./cookies.ts";
 export { isCrawler } from "./crawler.ts";
 export {
   type Geolocate,
@@ -47,15 +41,16 @@ export {
   localeUrl,
 } from "./seo.ts";
 export type {
+  CookieConfig,
   GeoHint,
   GeolocationMode,
   Language,
   Locale,
   LocaleGroup,
   LocalePrefix,
+  MaybePromise,
   Outcome,
   Region,
-  RouterRequest,
   Routing,
   WildcardLocale,
 } from "./types.ts";

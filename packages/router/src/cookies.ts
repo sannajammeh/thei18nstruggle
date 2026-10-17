@@ -1,13 +1,14 @@
-export const LOCALE_COOKIE = "NEXT_LOCALE";
+import type { CookieConfig, Routing } from "./types.ts";
 
-/**
- * Not httpOnly: client-side code must be able to read and clear it to offer
- * a "switch market" control.
- */
-export const BYPASS_COOKIE = "X-BYPASS-GEOLOCATION";
+/** Defaults for `Routing.cookies`; every field is overridable in the config. */
+export const cookieDefaults: CookieConfig = {
+  locale: "NEXT_LOCALE",
+  bypass: "X-BYPASS-GEOLOCATION",
+  localeMaxAge: 60 * 60 * 24 * 365,
+  bypassMaxAge: 60 * 60 * 24 * 7,
+  redirectStatus: 307,
+};
 
-export const BYPASS_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
-
-export const LOCALE_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
-
-export const REDIRECT_STATUS = 307 as const;
+export function resolveCookies(config: Routing): CookieConfig {
+  return { ...cookieDefaults, ...config.cookies };
+}

@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { geolocate } from "../src/geolocate.ts";
+import { type Geolocate, geolocate } from "../src/geolocate.ts";
 import { blueprintConfig, GOOGLEBOT, makeRequest } from "./helpers.ts";
 
 describe("geolocate", () => {
@@ -43,5 +43,12 @@ describe("geolocate", () => {
   test("no geo headers at all → null (negotiation fallback)", async () => {
     const request = makeRequest("https://example.com/");
     expect(await geolocate(request, blueprintConfig)).toBeNull();
+  });
+
+  test("sync resolvers are valid stages", async () => {
+    const syncGeolocate: Geolocate = () => ({ region: "SE" });
+    expect(
+      await syncGeolocate(makeRequest("https://example.com/"), blueprintConfig),
+    ).toEqual({ region: "SE" });
   });
 });

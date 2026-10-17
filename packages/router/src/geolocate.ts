@@ -1,12 +1,12 @@
 import { RequestCookies } from "@edge-runtime/cookies";
-import { BYPASS_COOKIE } from "./cookies.ts";
+import { resolveCookies } from "./cookies.ts";
 import { isCrawler } from "./crawler.ts";
-import type { GeoHint, RouterRequest, Routing } from "./types.ts";
+import type { GeoHint, MaybePromise, Routing } from "./types.ts";
 
 export type Geolocate = (
-  request: RouterRequest,
+  request: Request,
   config: Routing,
-) => Promise<GeoHint | null>;
+) => MaybePromise<GeoHint | null>;
 
 const REGION_HEADERS = [
   "x-vercel-ip-country",
@@ -20,12 +20,14 @@ const REGION_HEADERS = [
  * locale cookie and negotiation.
  */
 export async function geolocate(
-  request: RouterRequest,
-  _config?: Routing,
+  request: Request,
+  config: Routing,
 ): Promise<GeoHint | null> {
   const headers = request.headers;
   if (isCrawler(headers.get("user-agent"))) return null;
-  if (new RequestCookies(headers).has(BYPASS_COOKIE)) return null;
+  if (new RequestCookies(headers).has(resolveCookies(config).bypass)) {
+    return null;
+  }
 
   for (const header of REGION_HEADERS) {
     const value = headers.get(header);

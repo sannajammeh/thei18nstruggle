@@ -24,6 +24,19 @@ export interface LocaleGroup {
   exclude?: (Locale | WildcardLocale)[];
 }
 
+export interface CookieConfig {
+  /** Stores the visitor's chosen locale. */
+  locale: string;
+  /** Not httpOnly: client-side code must be able to read and clear it to offer a "switch market" control. */
+  bypass: string;
+  /** How long the locale preference cookie persists, in seconds. */
+  localeMaxAge: number;
+  /** How long the bypass cookie persists, in seconds. */
+  bypassMaxAge: number;
+  /** HTTP status for redirects. */
+  redirectStatus: 307;
+}
+
 export interface Routing {
   /** The locale served at the root URL. */
   defaultLocale: Locale;
@@ -32,6 +45,8 @@ export interface Routing {
 
   /** Groups of content-identical locales. */
   groups: LocaleGroup[];
+
+  cookies?: Partial<CookieConfig>;
 
   /**
    * Whether the default locale is served without a URL prefix.
@@ -48,16 +63,12 @@ export interface Routing {
   geolocation?: GeolocationMode;
 }
 
+/** A value or a promise of one — stages may be sync or async. */
+export type MaybePromise<T> = T | Promise<T>;
+
 /** A geolocation hint resolved for the current request. */
 export interface GeoHint {
   region: Region;
-}
-
-/** Minimal request surface the core stages need; satisfied by NextRequest and friends. */
-export interface RouterRequest {
-  url: string | URL;
-  headers: Headers;
-  method?: string;
 }
 
 /**

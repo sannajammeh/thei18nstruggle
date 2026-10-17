@@ -1,7 +1,13 @@
 import { createRouter } from "@concept/router/next";
 import { routing } from "./i18n/config";
 
-export const proxy = await createRouter(routing);
+export const proxy = await createRouter(routing, {
+  geolocate: (req) => {
+    return {
+      region: req.headers.get("x-vercel-ip-country") || "NO",
+    };
+  },
+});
 
 // The matcher must be an inline constant — Next.js statically analyzes it at
 // build time; imported values are ignored.

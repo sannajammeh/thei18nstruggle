@@ -1,4 +1,4 @@
-import type { RouterRequest, Routing } from "../src/types.ts";
+import type { Routing } from "../src/types.ts";
 
 /** en-DE/en-NL are members but not in `locales` — they must be ignored, not fatal. */
 export const blueprintConfig: Routing = {
@@ -75,7 +75,7 @@ export function makeRequest(
     method?: string;
     userAgent?: string | null;
   } = {},
-): RouterRequest {
+): Request {
   const headers = new Headers(init.headers);
   if (init.userAgent !== null)
     headers.set("user-agent", init.userAgent ?? BROWSER_UA);
@@ -87,7 +87,7 @@ export function makeRequest(
         .join("; "),
     );
   }
-  return { url, headers, method: init.method };
+  return new Request(url, { method: init.method, headers });
 }
 
 export const GOOGLEBOT =

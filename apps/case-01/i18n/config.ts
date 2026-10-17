@@ -4,7 +4,7 @@ export const routing: Routing = {
   defaultLocale: "en-US",
 
   locales: ["en-US", "en-SE", "en-FR", "sv-SE", "fr-FR"],
-
+  geolocation: "force",
   groups: [
     {
       language: "en",
@@ -24,5 +24,3 @@ export const routing: Routing = {
     },
   ],
 };
-
-export const locales = routing.locales;

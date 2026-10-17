@@ -1,9 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
-import {
-  LOCALE_COOKIE,
-  LOCALE_COOKIE_MAX_AGE,
-  REDIRECT_STATUS,
-} from "../cookies.ts";
+import { resolveCookies } from "../cookies.ts";
 import { type Geolocate, geolocate } from "../geolocate.ts";
 import { type Negotiate, negotiate } from "../negotiate.ts";
 import { getOutcome, type ResolveOutcome } from "../outcome.ts";
@@ -35,14 +31,16 @@ export async function createRouter(
 
 export async function getResponse(
   outcome: Outcome,
-  _config?: Routing,
+  config: Routing,
 ): Promise<NextResponse> {
+  const cookies = resolveCookies(config);
+
   let response: NextResponse;
   switch (outcome.type) {
     case "redirect":
       response = NextResponse.redirect(
         new URL(outcome.url),
-        outcome.status ?? REDIRECT_STATUS,
+        outcome.status ?? cookies.redirectStatus,
       );
       break;
     case "rewrite":
@@ -54,10 +52,10 @@ export async function getResponse(
 
   if (outcome.setCookie) {
     response.cookies.set({
-      name: LOCALE_COOKIE,
+      name: cookies.locale,
       value: outcome.locale,
       path: "/",
-      maxAge: LOCALE_COOKIE_MAX_AGE,
+      maxAge: cookies.localeMaxAge,
       sameSite: "lax",
       httpOnly: false,
     });
