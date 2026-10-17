@@ -95,7 +95,7 @@ function Section({
   children?: ReactNode;
 }) {
   return (
-    <section id={id} className="scroll-mt-24 border-t border-line px-6 py-24">
+    <section id={id} className="border-t border-line px-6 py-24">
       <div className="mx-auto max-w-[720px]">
         <p className="font-mono text-xs uppercase tracking-[0.28em] text-accent">
           {num}
@@ -117,34 +117,19 @@ export default function Home() {
   const fixId = useId();
   const codeId = useId();
 
-  const nav = [
-    [hardId, "hard"],
-    [problemId, "problem"],
-    [seoId, "seo"],
-    [fixId, "the fix"],
-    [codeId, "code"],
-  ] as const;
-
   return (
     <>
       <div aria-hidden className="vig vig-top" />
       <div aria-hidden className="vig vig-bottom" />
 
-      <header className="sticky top-0 z-50">
-        <div className="mx-auto flex h-[60px] max-w-[720px] items-center justify-between px-6">
+      <header>
+        <div className="mx-auto flex h-[60px] max-w-[720px] items-center px-6">
           <a
             href={`#${topId}`}
             className="text-[15px] font-bold tracking-tight"
           >
             i18n<span className="text-dim">sucks</span>
           </a>
-          <nav className="hidden gap-6 text-[13px] text-dim sm:flex">
-            {nav.map(([id, label]) => (
-              <a key={id} href={`#${id}`} className="hover:text-accent">
-                {label}
-              </a>
-            ))}
-          </nav>
         </div>
       </header>
 
@@ -291,10 +276,7 @@ export default function Home() {
         </Section>
 
         {/* close */}
-        <section
-          id={codeId}
-          className="scroll-mt-24 border-t border-line px-6 pb-20 pt-28"
-        >
+        <section id={codeId} className="border-t border-line px-6 pb-20 pt-28">
           <div className="mx-auto max-w-[720px]">
             <p className="font-mono text-xs uppercase tracking-[0.28em] text-accent">
               05 — code example

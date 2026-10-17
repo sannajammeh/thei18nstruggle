@@ -67,7 +67,7 @@ components:
 
 **Creative North Star: "The Black Diagnosis"**
 
-A near-black instrument report. The page is monochrome typography on void black; the only color is a single diagnostic red that marks what is broken, plus one signal green marking what works. Hierarchy comes from weight, size, and tone steps — never from color variation. Depth comes from darkness: fixed vignettes at the top and bottom make content dissolve into black as it enters and leaves the viewport, and a transparent sticky header floats over the page with no border and no blur.
+A near-black instrument report. The page is monochrome typography on void black; the only color is a single diagnostic red that marks what is broken, plus one signal green marking what works. Hierarchy comes from weight, size, and tone steps — never from color variation. Depth comes from darkness: fixed vignettes at the top and bottom make content dissolve into black as it enters and leaves the viewport, and a static header sits above the page with no border and no blur.
 
 **Key Characteristics:**
 - Monochrome ground with red reserved strictly for diagnosis and hover states
@@ -118,7 +118,7 @@ A grayscale instrument panel with one alarm color. White is assertion, ash is co
 
 ## Layout
 
-Single centered column at a 720px measure with 24px side padding. Sections are full-width bands separated by 1px hairlines, with 96px vertical padding; the hero gets more (112px bottom, 144px top). Spacing rhythm is generous and even; more space above a heading than below. Below 640px: nav links hide, vignette heights shrink (160px/120px), type scales down via the clamps. Anchors scroll smoothly with 96px scroll clearance under the sticky header.
+Single centered column at a 720px measure with 24px side padding. Sections are full-width bands separated by 1px hairlines, with 96px vertical padding; the hero gets more (112px bottom, 144px top). Spacing rhythm is generous and even; more space above a heading than below. Below 640px: vignette heights shrink (160px/120px), type scales down via the clamps. Anchors scroll smoothly.
 
 ## Elevation & Depth
 
@@ -142,8 +142,7 @@ Rounded rectangles, small radii only: 8px on exhibit panels, 6px on buttons, 4px
 - **Motion:** lines rise 14px with exponential ease-out as they enter the viewport (scroll-driven, `cubic-bezier(0.16,1,0.3,1)`); reduced-motion and unsupported browsers see static lines.
 
 ### Navigation
-- **Style:** transparent sticky header, no border, no blur; bold wordmark with "sucks" dimmed to ash; ash 13px links, red on hover.
-- **Mobile:** links hidden below 640px.
+- **Style:** static header, no border, no blur; bold wordmark with "sucks" dimmed to ash; no nav links.
 
 ### Inline Code (prose)
 - **Style:** Geist Mono at 0.85em, foreground color, instrument-black fill, 1px hairline border, 4px radius, 1px 5px padding.
