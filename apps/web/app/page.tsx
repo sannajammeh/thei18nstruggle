@@ -317,11 +317,7 @@ export default function Home() {
             <h2 className="mt-4 text-[clamp(24px,3vw,32px)] font-semibold leading-[1.15] tracking-[-0.02em]">
               Steal the structure.
             </h2>
-            <Dek>
-              The whole system is one config. Declare your locales, group them
-              by language, exclude the unique markets — the indexable set and
-              the canonical policy fall out of it.
-            </Dek>
+            <Dek>Code example of the routing config.</Dek>
 
             <Figure
               caption="The whole system"
