@@ -283,6 +283,289 @@ body {
   padding: 0 6px;
 }
 
+/* interactive request-flow exhibit */
+.fi {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px 0;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.fi-tabs-wrap {
+  padding-top: 24px;
+}
+.fi-tabs {
+  display: flex;
+  gap: 20px;
+  margin: 0 20px 14px;
+  border-bottom: 1px solid var(--line);
+}
+.fi-tab {
+  padding: 0 2px 8px;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  margin-bottom: -1px;
+  background: none;
+  color: var(--dim);
+  font-family: inherit;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    color 0.2s,
+    border-color 0.2s;
+}
+.fi-tab:hover {
+  color: var(--foreground);
+}
+.fi-tab.active {
+  color: var(--foreground);
+  border-bottom-color: #3fbf6f;
+}
+.fi-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0 20px;
+}
+.fi-chip {
+  padding: 6px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: none;
+  color: var(--foreground);
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  transition:
+    border-color 0.2s,
+    color 0.2s;
+}
+.fi-chip:hover {
+  border-color: var(--dim);
+}
+.fi-chip.active {
+  border-color: #3fbf6f;
+  color: #3fbf6f;
+}
+.fi-chip-path {
+  color: var(--dim);
+}
+.fi-chip.active .fi-chip-path {
+  color: #3fbf6f;
+  opacity: 0.7;
+}
+.fi-viewport {
+  overflow: hidden;
+  padding: 6px 20px 10px;
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0,
+    #000 16px,
+    #000 calc(100% - 16px),
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent 0,
+    #000 16px,
+    #000 calc(100% - 16px),
+    transparent 100%
+  );
+}
+.fi-track {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 56px;
+  width: max-content;
+  transition: transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+  will-change: transform;
+}
+.fi-edges {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+.fi-edge {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1;
+  stroke-dasharray: 1400;
+  stroke-dashoffset: 1400;
+  transition: stroke-dashoffset 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) 0.15s;
+}
+.fi-edge.on {
+  stroke-dashoffset: 0;
+}
+.fi-node {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #161616;
+  color: var(--foreground);
+  white-space: nowrap;
+  opacity: 0;
+  transition:
+    opacity 0.45s,
+    padding 0.5s cubic-bezier(0.22, 0.61, 0.36, 1),
+    border-color 0.3s,
+    box-shadow 0.3s;
+}
+.fi-node.on {
+  opacity: 1;
+}
+.fi-node.focus {
+  border-color: #3fbf6f;
+  box-shadow: 0 0 12px rgb(63 191 111 / 0.15);
+}
+/* the redirect is the one move the router makes — it gets its own color */
+.fi-node.blue,
+.fi-node.blue.focus {
+  border-color: #8ab4f8;
+  box-shadow: 0 0 12px rgb(138 180 248 / 0.18);
+}
+.fi-node.blue .fi-body-in {
+  color: #8ab4f8;
+}
+.fi-node.past {
+  padding: 6px 10px;
+  opacity: 0.5;
+}
+.fi-label {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.fi-body {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition:
+    grid-template-rows 0.5s cubic-bezier(0.22, 0.61, 0.36, 1),
+    opacity 0.35s;
+}
+.fi-node.past .fi-body {
+  grid-template-rows: 0fr;
+  opacity: 0;
+}
+.fi-body-in {
+  display: block;
+  overflow: hidden;
+  min-height: 0;
+}
+.fi-dim {
+  color: var(--dim);
+}
+.fi-ok {
+  color: #3fbf6f;
+}
+.fi-branch {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 40px;
+}
+.fi-lane {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.fi-lane.tag-below {
+  flex-direction: column-reverse;
+}
+.fi-row {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+}
+.fi-tag {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dim);
+  opacity: 0;
+  transition: opacity 0.45s;
+}
+.fi-tag.on {
+  opacity: 1;
+}
+.fi-foot {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 20px;
+}
+.fi-replay {
+  padding: 4px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: none;
+  color: var(--dim);
+  font-family: inherit;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    color 0.2s,
+    border-color 0.2s;
+}
+.fi-replay:hover:not(:disabled) {
+  color: var(--foreground);
+  border-color: var(--dim);
+}
+.fi-replay:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.fi-nav {
+  width: 30px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: none;
+  color: var(--dim);
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    color 0.2s,
+    border-color 0.2s;
+}
+.fi-nav:hover:not(:disabled) {
+  color: var(--foreground);
+  border-color: var(--dim);
+}
+.fi-nav:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+@media (prefers-reduced-motion: reduce) {
+  .fi-track,
+  .fi-edge,
+  .fi-node,
+  .fi-body,
+  .fi-tab,
+  .fi-chip,
+  .fi-nav {
+    transition: none;
+  }
+}
+
 /* code-exhibit line vocabulary */
 .ex {
   display: block;

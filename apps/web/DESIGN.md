@@ -10,6 +10,7 @@ colors:
   ghost: "#55554f"
   diagnostic-red: "#ff4a3a"
   signal-green: "#3fbf6f"
+  redirect-blue: "#8ab4f8"
 typography:
   display:
     fontFamily: "Geist, ui-sans-serif, system-ui, sans-serif"
@@ -91,6 +92,7 @@ A grayscale instrument panel with one alarm color. White is assertion, ash is co
 - **Ash** (#8a8a86): secondary text, argument prose, nav links, essential mono labels.
 - **Ghost** (#55554f): faint chrome — inline code comments, dashed placeholder tags, hints that are deliberately quiet.
 - **Signal Green** (#3fbf6f): ✓ lines and "proposed" status only — the fix, in one color.
+- **Redirect Blue** (#8ab4f8): the 307 redirect response in the interactive request-flow exhibit only — the one move the router makes. Borrowed from the SERP exhibit's Google blue so it stays in-family.
 
 ### Named Rules
 **The Diagnostic Red Rule.** Red appears on small diagnostic marks, hover states, and the headline "Struggle" — user-approved. It never fills a surface and never exceeds a text-line's worth of pixels outside those uses.
