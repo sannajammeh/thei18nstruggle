@@ -2,6 +2,7 @@ import Image from "next/image";
 import type { ReactNode } from "react";
 import { useId } from "react";
 import { highlight } from "sugar-high";
+import { FlowDiagram } from "./flow-diagram";
 
 function Dek({ children }: { children: ReactNode }) {
   return (
@@ -27,7 +28,7 @@ function Figure({
   status?: string;
   tone?: "bad" | "ok";
   code?: string;
-  variant?: "serp";
+  variant?: "serp" | "flow";
   children?: ReactNode;
 }) {
   return (
@@ -56,6 +57,8 @@ function Figure({
             __html: highlight(code, { lang: "typescript" }).replace(/\n/g, ""),
           }}
         />
+      ) : variant === "flow" ? (
+        children
       ) : variant === "serp" ? (
         <div className="serp-body">{children}</div>
       ) : (
@@ -66,6 +69,38 @@ function Figure({
     </figure>
   );
 }
+
+function FlowBox({
+  id,
+  head,
+  children,
+}: {
+  id?: string;
+  head?: string;
+  children?: ReactNode;
+}) {
+  return (
+    <div className="flow-box" data-flow-node={id}>
+      {head ? <span className="flow-head">{head}</span> : null}
+      {children}
+    </div>
+  );
+}
+
+const flowEdges = [
+  ["config", "grouped"],
+  ["grouped", "en"],
+  ["grouped", "sv"],
+  ["grouped", "fr"],
+  ["en", "en-members"],
+  ["en-members", "en-au"],
+  ["en-au", "google"],
+  ["sv", "sv-members"],
+  ["sv-members", "google"],
+  ["fr", "fr-members"],
+  ["fr-members", "fr-ca"],
+  ["fr-ca", "google"],
+] as const;
 
 function SerpSearch({ query }: { query: string }) {
   return (
@@ -306,6 +341,95 @@ export default function Home() {
             locale by performing geolocation upon entering the site. Google, on
             the other hand, is not.
           </Dek>
+          <Figure
+            caption="Exhibit — how the grouping flows"
+            status="the fix"
+            tone="ok"
+            variant="flow"
+          >
+            <FlowDiagram edges={flowEdges}>
+              <FlowBox id="config" head="routing config">
+                <span className="flow-sub">
+                  every locale declared — nothing hidden
+                </span>
+              </FlowBox>
+              <FlowBox id="grouped" head="grouped by language">
+                <span className="flow-sub">
+                  content-identical markets collapse
+                </span>
+              </FlowBox>
+              <div className="flow-branch">
+                <div className="flow-col">
+                  <FlowBox id="en" head="en">
+                    <span className="flow-sub">canonical · en-US (root)</span>
+                  </FlowBox>
+                  <FlowBox id="en-members">
+                    <span className="flow-line">
+                      <span className="no">en-GB ✗</span>
+                    </span>
+                    <span className="flow-line">
+                      <span className="no">en-SE ✗</span>
+                    </span>
+                    <span className="flow-line">
+                      <span className="no">en-NO ✗</span>
+                    </span>
+                    <span className="flow-sub">
+                      noindex · canonical → en-US
+                    </span>
+                  </FlowBox>
+                  <FlowBox id="en-au">
+                    <span className="flow-line">
+                      <span className="ok">en-AU ✓</span>
+                    </span>
+                    <span className="flow-sub">unique · fully indexed</span>
+                  </FlowBox>
+                </div>
+                <div className="flow-col">
+                  <FlowBox id="sv" head="sv">
+                    <span className="flow-sub">canonical · sv-SE</span>
+                  </FlowBox>
+                  <FlowBox id="sv-members">
+                    <span className="flow-line">
+                      <span className="no">sv-NO ✗</span>
+                    </span>
+                    <span className="flow-line">
+                      <span className="no">sv-FI ✗</span>
+                    </span>
+                    <span className="flow-sub">
+                      noindex · canonical → sv-SE
+                    </span>
+                  </FlowBox>
+                </div>
+                <div className="flow-col">
+                  <FlowBox id="fr" head="fr">
+                    <span className="flow-sub">canonical · fr-FR</span>
+                  </FlowBox>
+                  <FlowBox id="fr-members">
+                    <span className="flow-line">
+                      <span className="no">fr-BE ✗</span>
+                    </span>
+                    <span className="flow-sub">
+                      noindex · canonical → fr-FR
+                    </span>
+                  </FlowBox>
+                  <FlowBox id="fr-ca">
+                    <span className="flow-line">
+                      <span className="ok">fr-CA ✓</span>
+                    </span>
+                    <span className="flow-sub">unique · fully indexed</span>
+                  </FlowBox>
+                </div>
+              </div>
+              <FlowBox id="google" head="what google sees">
+                <span className="flow-sub ok">
+                  example.com ✓ · /sv-SE ✓ · /fr-FR ✓ · /en-AU ✓ · /fr-CA ✓
+                </span>
+                <span className="flow-sub">
+                  humans → geolocated into their market · google → never
+                </span>
+              </FlowBox>
+            </FlowDiagram>
+          </Figure>
         </Section>
 
         {/* close */}
