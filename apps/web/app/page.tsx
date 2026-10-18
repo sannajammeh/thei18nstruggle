@@ -317,11 +317,7 @@ export default function Home() {
             <h2 className="mt-4 text-[clamp(24px,3vw,32px)] font-semibold leading-[1.15] tracking-[-0.02em]">
               Steal the structure.
             </h2>
-            <Dek>
-              The whole system is one config. Declare your locales, group them
-              by language, exclude the unique markets — the indexable set and
-              the canonical policy fall out of it.
-            </Dek>
+            <Dek>Code example of the routing config.</Dek>
 
             <Figure
               caption="The whole system"
@@ -356,10 +352,13 @@ const routing: Routing = {
 export const proxy = await createRouter(routing);`}
             />
 
-            <span className="mt-9 inline-flex items-center gap-2.5 font-mono text-sm text-foreground">
+            <a
+              href="https://github.com/sannajammeh/thei18nstruggle/tree/main/apps/example"
+              className="mt-9 inline-flex items-center gap-2.5 font-mono text-sm text-foreground"
+            >
               <span aria-hidden>→</span> the full blueprint
-              <span className="text-dim">(URL from you)</span>
-            </span>
+              <span className="text-dim">github.com/sannajammeh/thei18nstruggle/apps/example</span>
+            </a>
           </div>
         </section>
       </main>
