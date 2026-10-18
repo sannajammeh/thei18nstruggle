@@ -356,10 +356,13 @@ const routing: Routing = {
 export const proxy = await createRouter(routing);`}
             />
 
-            <span className="mt-9 inline-flex items-center gap-2.5 font-mono text-sm text-foreground">
+            <a
+              href="https://github.com/sannajammeh/thei18nstruggle/tree/main/apps/example"
+              className="mt-9 inline-flex items-center gap-2.5 font-mono text-sm text-foreground"
+            >
               <span aria-hidden>→</span> the full blueprint
-              <span className="text-dim">(URL from you)</span>
-            </span>
+              <span className="text-dim">github.com/sannajammeh/thei18nstruggle/apps/example</span>
+            </a>
           </div>
         </section>
       </main>
