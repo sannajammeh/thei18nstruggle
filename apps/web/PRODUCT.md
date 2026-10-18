@@ -36,7 +36,7 @@ Read on the web, often shared developer-to-developer (links in threads, chats, n
 
 ## Brand Commitments
 
-- Name: **i18nsucks** (the repo and site name; the blunt register of the name is part of the brand).
+- Name: **The i18n Struggle** (renamed from the earlier working title "i18nsucks"; the blunt register of the brand remains part of it).
 - Genre reference the user made binding: loggingsucks.com — same family of single-topic, opinionated manifesto sites.
 - Voice: blunt, opinionated, developer-to-developer.
 

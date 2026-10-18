@@ -172,7 +172,7 @@ export default function Home() {
         <section className="px-6 pb-28 pt-36">
           <div className="mx-auto max-w-[720px]">
             <h1 className="mt-5 text-[clamp(40px,5.5vw,64px)] font-bold leading-[1.04] tracking-[-0.025em]">
-              i18n <span className="text-accent">Sucks.</span>
+              The i18n <span className="text-accent">Struggle</span>
             </h1>
             <Dek>And here&rsquo;s how to make it better.</Dek>
             <p className="mt-6 flex items-center gap-3 font-mono text-xs uppercase tracking-[0.28em] text-dim">
@@ -366,7 +366,7 @@ export const proxy = await createRouter(routing);`}
 
       <footer className="border-t border-line px-6 pb-16 pt-10">
         <div className="mx-auto flex max-w-[720px] items-center justify-between text-[13px] text-dim">
-          <span>i18nsucks</span>
+          <span>the i18n struggle</span>
           <span>no analytics yet · © 2026 sannajammeh</span>
         </div>
       </footer>

@@ -1,5 +1,5 @@
 ---
-name: i18nsucks
+name: the-i18n-struggle
 description: A blunt, black-ground diagnosis of internationalization — minimal dark mode with one diagnostic red.
 colors:
   void-black: "#0a0a0a"
@@ -61,7 +61,7 @@ components:
     rounded: "{rounded.lg}"
 ---
 
-# Design System: i18nsucks
+# Design System: The i18n Struggle
 
 ## Overview
 
@@ -81,7 +81,7 @@ A near-black instrument report. The page is monochrome typography on void black;
 A grayscale instrument panel with one alarm color. White is assertion, ash is commentary, ghost is chrome, red is fault.
 
 ### Primary
-- **Diagnostic Red** (#ff4a3a): section-number labels, broken-URL strikethroughs, ✗ transcript lines, "broken" status tags, hover states on links and outline buttons, and the headline "Sucks." Never as a surface.
+- **Diagnostic Red** (#ff4a3a): section-number labels, broken-URL strikethroughs, ✗ transcript lines, "broken" status tags, hover states on links and outline buttons, and the headline "Struggle". Never as a surface.
 
 ### Neutral
 - **Void Black** (#0a0a0a): page ground.
@@ -93,7 +93,7 @@ A grayscale instrument panel with one alarm color. White is assertion, ash is co
 - **Signal Green** (#3fbf6f): ✓ lines and "proposed" status only — the fix, in one color.
 
 ### Named Rules
-**The Diagnostic Red Rule.** Red appears on small diagnostic marks, hover states, and the headline "Sucks." — user-approved. It never fills a surface and never exceeds a text-line's worth of pixels outside those uses.
+**The Diagnostic Red Rule.** Red appears on small diagnostic marks, hover states, and the headline "Struggle" — user-approved. It never fills a surface and never exceeds a text-line's worth of pixels outside those uses.
 
 **The Dissolve Rule.** The page's edges are black voids. Content near the top or bottom of the viewport fades toward `rgba(5,5,5,.9)` under fixed, non-interactive vignettes. New surfaces keep this immersion; never replace it with hard edges or opaque bars.
 

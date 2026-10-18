@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "i18nsucks",
+  title: "The i18n Struggle",
   description:
-    "i18n sucks — especially international e-commerce. A blunt diagnosis of multi-locale, multi-market websites, and the case for language-grouped markets.",
+    "i18n is a struggle — especially international e-commerce. A blunt diagnosis of multi-locale, multi-market websites, and the case for language-grouped markets.",
   authors: [{ name: "sannajammeh" }],
   creator: "sannajammeh",
 };
